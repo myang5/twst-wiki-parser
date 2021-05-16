@@ -1,9 +1,4 @@
-import {
-  COLORS_KEYS,
-  DETAILS_KEYS,
-  CATEGORY_NAMES,
-  NAV_KEYS,
-} from '../constants/';
+import { DETAILS_KEYS, CATEGORY_NAMES, NAV_KEYS } from '../constants/';
 import extractBr from './extractBr';
 import convertEditorDataToDom from './convertEditorDataToDom';
 import formatLine, { isFileName } from './formatLine';
@@ -27,7 +22,7 @@ export default function convertText({
   normalizeDetails(details);
   onChangeDetails({ ...details });
 
-  const TEMPLATES = getTemplates(details, colors);
+  const templates = getTemplates(details, colors);
   const inputDom = extractBr(convertEditorDataToDom(inputData));
 
   updateLocalStorage(
@@ -40,7 +35,7 @@ export default function convertText({
   const input = inputDom.querySelectorAll('p');
   let output = formatTopNavBar(nav);
 
-  output += TEMPLATES.header;
+  output += templates.header();
 
   let tlMarkerCount = 0; // keep track of count to alert user when count mismatches
   let i = 0;
@@ -52,7 +47,7 @@ export default function convertText({
     i += 1;
   }
 
-  const formatLineHelper = formatLine(TEMPLATES, renders);
+  const formatLineHelper = formatLine(templates, renders);
 
   for (i; i < input.length; i++) {
     tlMarkerCount += countTlMarkers(input[i].textContent);
@@ -60,8 +55,8 @@ export default function convertText({
   }
 
   if (tlMarkerCount > 0) output += formatTlNotes(tlNotesData, tlMarkerCount);
-  output += TEMPLATES.translators;
-  output += TEMPLATES.editors;
+  output += templates.translators;
+  output += templates.editors;
   output += '|}\n';
   output += formatBottomNavBar(nav);
   output += formatCategories(Object.keys(renders));
@@ -100,92 +95,48 @@ function normalizeDetails(details) {
   });
 }
 
-// Helpers for getTemplates
-const externalLinkTemplate = (link, text, color) =>
-  `{{Link|${link}|${text}|${color}}}`;
-
-const internalLinkTemplate = (userName, name, color) =>
-  `{{inLink|User:${userName}|${name}|${color}}}`;
-
-const getPersonsTemplate = ({
-  persons,
-  personsTypeDetailKey,
-  textCol,
-  bottomCol,
-}) => {
-  const resultText = persons.reduce((result, person) => {
-    const { [DETAILS_KEYS.NAME]: name, [DETAILS_KEYS.LINK]: link } = person;
-    if (!name && !link) return result;
-    if (result.length !== 0) {
-      result += ', ';
-    }
-    result += !link
-      ? name
-      : link.startsWith('http')
-      ? externalLinkTemplate(link, name, textCol)
-      : internalLinkTemplate(link, name, textCol);
-
-    return result;
-  }, '');
-  if (resultText.length === 0) return resultText;
-  const label =
-    personsTypeDetailKey === DETAILS_KEYS.TRANSLATORS
-      ? 'Translation'
-      : 'Proofreading';
-  return `|-
-! colspan="2" style="text-align:center;background-color:${bottomCol};color:${textCol};" |'''${label}: ${resultText} '''
-`;
-};
-
 /**
  * Helper function to format the wiki code for story header and footer
  * with the user input
- * Also saves certain values in localStorage for user convenience
- * @param {{string: String, string: String}} details Object containing values from the Details tab
- * @param {} colors Object containing the colors from
+ * @param {Object} details
  * @return {Object} Object containing the wikia syntax to use as templates
  */
-const getTemplates = (details, colors) => {
-  const { location, translators, editors } = details;
-  const {
-    [COLORS_KEYS.WRITER]: writerCol,
-    [COLORS_KEYS.LOCATION]: locationCol,
-    [COLORS_KEYS.BOTTOM]: bottomCol,
-    [COLORS_KEYS.TEXT]: textCol,
-  } = colors;
+const getTemplates = (details) => {
+  const { featuredCharacter, translator, tlLink, title } = details;
 
   const templates = {};
 
-  templates.header = `{| class="article-table" cellspacing="1/6" cellpadding="2" border="1" align="center" width="100%"
-! colspan="2" style="text-align:center;background-color:${writerCol}; color:${textCol};"
+  templates.header = () => `{{Personal Story Tabs/${featuredCharacter}}}
+{{FanTL|tl=[${tlLink} ${translator}]|story}}
+{| class="storytable imgfit" width="100%" style="text-align:left"
+|- id="Top"
+! colspan="3" |${title}
+|}
+`;
+  templates.tableStart =
+    () => `{| class="storytable imgfit" width="100%" style="text-align:left"
+`;
+  templates.cgRender = (filename) => `|-
+| colspan="3" |[[File:${filename}]]
+`;
+  templates.locationHeading = (location) => `|-
+| colspan="3" class="secondaryheader"|${location}
+`;
+  templates.firstStoryCharacter = (value) => `|-
+| width="10%" |{{Story Character|${value}}}
+`;
+  templates.storyCharacter = (value) => `|-
+|{{Story Character|${value}}}
+`;
+  templates.heading = (heading) => `|-
+| colspan="3" style="text-align:center;padding:2em"|${heading}
+`;
+  templates.personalStoryFooter = (fullName) => `|-
+| colspan="3" class="bottomnav" |✦ [[${fullName}/Personal Story|Main]] ✦
 |-
-| colspan="2" |[[File:HEADERFILE|660px|link=|center]]
+| colspan="3" style="text-align:center;" |[[#Top|Jump to top]]
 |-
-! colspan="2" style="text-align:center;background-color:${locationCol}; color:${textCol};" |'''Location: ${location}'''
 `;
-  templates.dialogueRender = `|-
-|[[File:FILENAME|x200px|link=|center]]
-|
-`;
-  templates.cgRender = `|-
-! colspan="2" style="text-align:center;" |[[File:FILENAME|center|link=|660px]]
-`;
-  templates.heading = `|-
-! colspan="2" style="text-align:center;background-color:${locationCol}; color:${textCol};" |'''HEADING'''
-`;
-  templates.translators = getPersonsTemplate({
-    persons: translators,
-    personsTypeDetailKey: DETAILS_KEYS.TRANSLATORS,
-    textCol,
-    bottomCol,
-  });
-  templates.editors = getPersonsTemplate({
-    persons: editors,
-    personsTypeDetailKey: DETAILS_KEYS.EDITORS,
-    textCol,
-    bottomCol,
-  });
-
   return templates;
 };
 
