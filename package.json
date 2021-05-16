@@ -1,7 +1,7 @@
 {
   "name": "twst-wiki-parser",
   "version": "1.0.0",
-  "description": "A simple formatter that takes in translators' dialogue and converts it into source code for a new page on the Ensemble Stars wikia. Understanding and uploading the wiki code shouldn't be a roadblock for translators to share their hard work!",
+  "description": "A simple formatter that takes in translators' dialogue and converts it into source code for a new page on the Twisted Wonderland wikia. Understanding and uploading the wiki code shouldn't be a roadblock for translators to share their hard work!",
   "scripts": {
     "test": "jest",
     "dev": "webpack-dev-server --config webpack.dev.js",
