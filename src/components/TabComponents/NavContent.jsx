@@ -63,9 +63,9 @@ function NavContent() {
       <p className="p--margin-bottom-none">Top nav bar code preview</p>
       <blockquote className="preview">{`${formatTopNavBar(nav)}`}</blockquote>
       <p className="p--margin-bottom-none">Bottom nav bar code preview</p>
-      <blockquote className="preview">{`${formatBottomNavBar(
-        nav
-      )}`}</blockquote>
+      <blockquote className="preview">
+        {`${formatBottomNavBar(nav)}`}
+      </blockquote>
     </>
   );
 }

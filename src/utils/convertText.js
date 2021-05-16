@@ -33,7 +33,7 @@ export default function convertText({
 
   updateLocalStorage(
     DETAILS_KEYS.TRANSLATORS,
-    details[DETAILS_KEYS.TRANSLATORS]
+    details[DETAILS_KEYS.TRANSLATORS],
   );
   updateLocalStorage(DETAILS_KEYS.EDITORS, details[DETAILS_KEYS.EDITORS]);
   updateLocalStorage('nav', nav);
@@ -68,7 +68,7 @@ export default function convertText({
   output += formatCategories(
     details[DETAILS_KEYS.AUTHOR],
     Object.keys(renders),
-    details[DETAILS_KEYS.WHAT_GAME]
+    details[DETAILS_KEYS.WHAT_GAME],
   );
   return output;
 }
@@ -245,7 +245,7 @@ function formatTlNotes(tlNotesData, count) {
       if (dom.body.firstChild.tagName.toUpperCase() === 'OL') {
         let listItems = Array.from(dom.querySelectorAll('li'));
         listItems = listItems.map((item) =>
-          item.textContent.replace(/&nbsp;/g, ' ').trim()
+          item.textContent.replace(/&nbsp;/g, ' ').trim(),
         );
         notes = listItems.filter((item) => item.trim().length > 0); // filter out empty lines
       }

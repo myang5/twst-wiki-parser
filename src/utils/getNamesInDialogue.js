@@ -14,7 +14,7 @@ export default function getNamesInDialogue(editorData) {
   const inputDom = extractBr(convertEditorDataToDom(editorData));
   const lines = Array.from(
     inputDom.querySelectorAll('p'),
-    (p) => p.textContent
+    (p) => p.textContent,
   );
   const names = {}; // add "key" of each line if there is one
   lines.forEach((line) => {

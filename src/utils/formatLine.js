@@ -63,7 +63,7 @@ export default function formatLine(TEMPLATES, renders) {
       currentName = ''; // since its new section
       return TEMPLATES.heading.replace(
         'HEADING',
-        line.slice(line.indexOf(':') + 1).trim()
+        line.slice(line.indexOf(':') + 1).trim(),
       );
     }
     // -----FINALLY PROCESS DIALOGUE LINES WITH LABELS-----
@@ -139,7 +139,7 @@ function formatTlMarker(line) {
       markers.forEach((marker) => {
         const num = marker.substring(
           marker.indexOf('[') + 1,
-          marker.indexOf(']')
+          marker.indexOf(']'),
         );
         const tlCode = `<span id='${title}Ref${num}'>[[#${title}Note${num}|<sup>[${num}]</sup>]]</span>`;
         line = line.replace(marker, tlCode);

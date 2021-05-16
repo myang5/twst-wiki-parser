@@ -63,7 +63,7 @@ export function InputEditor() {
       writer.setAttribute(
         'spellcheck',
         'false',
-        inputRef.current.editor.editing.view.document.getRoot()
+        inputRef.current.editor.editing.view.document.getRoot(),
       );
     });
   }, []);
@@ -98,7 +98,7 @@ export function TLNotesEditor() {
       writer.setAttribute(
         'spellcheck',
         'false',
-        tlNotesRef.current.editor.editing.view.document.getRoot()
+        tlNotesRef.current.editor.editing.view.document.getRoot(),
       );
     });
   }, []);

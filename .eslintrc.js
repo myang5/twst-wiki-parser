@@ -27,7 +27,7 @@ module.exports = {
     'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
     'react/prop-types': 0,
     'jsx-a11y/label-has-associated-control': [2, { assert: 'either' }],
-    'react/jsx-one-expression-per-line': [2, { allow: 'single-child' }],
+    'react/jsx-one-expression-per-line': 0,
     'object-curly-newline': 0,
     'no-disabled-tests': 0,
   },
