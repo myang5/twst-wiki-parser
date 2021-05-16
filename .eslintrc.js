@@ -26,7 +26,7 @@ module.exports = {
     'no-use-before-define': 0,
     'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
     'react/prop-types': 0,
-    'jsx-a11y/label-has-associated-control': 0,
+    'jsx-a11y/label-has-associated-control': [1, { assert: 'either' }],
     'react/jsx-one-expression-per-line': 0,
     'object-curly-newline': 0,
     'no-disabled-tests': 0,

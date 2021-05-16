@@ -1,6 +1,5 @@
 export const DETAILS_KEYS = {
   LOCATION: 'location',
-  AUTHOR: 'author',
   TRANSLATORS: 'translators',
   EDITORS: 'editors',
   NAME: 'name',

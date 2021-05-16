@@ -1,9 +1,7 @@
 import React, { useContext } from 'react';
 import { StateContext } from '../Main/StateContext';
-import { AUTHOR_NAMES, DETAILS_KEYS } from 'Constants';
+import { DETAILS_KEYS } from 'Constants';
 import ColorContent from './ColorContent';
-
-const authors = Object.values(AUTHOR_NAMES);
 
 export default function DetailContent() {
   const { details, setDetails } = useContext(StateContext);
@@ -28,22 +26,6 @@ export default function DetailContent() {
           value={details[DETAILS_KEYS.LOCATION]}
           onChange={handleChange}
         />
-      </div>
-      <div className="row">
-        <label className="row__spacer" htmlFor={DETAILS_KEYS.AUTHOR}>
-          Writer
-        </label>
-        <select
-          id={DETAILS_KEYS.AUTHOR}
-          defaultValue={details[DETAILS_KEYS.AUTHOR]}
-          onChange={handleChange}
-        >
-          {authors.map((author) => (
-            <option key={author} value={author}>
-              {author}
-            </option>
-          ))}
-        </select>
       </div>
       <PersonInput
         personTypeDetailKey={DETAILS_KEYS.TRANSLATORS}

@@ -64,10 +64,7 @@ export default function convertText({
   output += TEMPLATES.editors;
   output += '|}\n';
   output += formatBottomNavBar(nav);
-  output += formatCategories(
-    details[DETAILS_KEYS.AUTHOR],
-    Object.keys(renders),
-  );
+  output += formatCategories(Object.keys(renders));
   return output;
 }
 
@@ -149,7 +146,7 @@ const getPersonsTemplate = ({
  * @return {Object} Object containing the wikia syntax to use as templates
  */
 const getTemplates = (details, colors) => {
-  const { location, author, translators, editors } = details;
+  const { location, translators, editors } = details;
   const {
     [COLORS_KEYS.WRITER]: writerCol,
     [COLORS_KEYS.LOCATION]: locationCol,
@@ -160,7 +157,7 @@ const getTemplates = (details, colors) => {
   const templates = {};
 
   templates.header = `{| class="article-table" cellspacing="1/6" cellpadding="2" border="1" align="center" width="100%"
-! colspan="2" style="text-align:center;background-color:${writerCol}; color:${textCol};" |'''Writer:''' ${author}
+! colspan="2" style="text-align:center;background-color:${writerCol}; color:${textCol};"
 |-
 | colspan="2" |[[File:HEADERFILE|660px|link=|center]]
 |-

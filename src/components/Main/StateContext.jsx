@@ -1,5 +1,5 @@
 import React, { createContext, useState, useRef } from 'react';
-import { AUTHOR_NAMES, COLORS_KEYS, DETAILS_KEYS } from 'Constants';
+import { COLORS_KEYS, DETAILS_KEYS } from 'Constants';
 import getEmptyPersonObject from 'Utils/getEmptyPersonObject';
 
 export const StateContext = createContext();
@@ -15,7 +15,6 @@ export const StateProvider = ({ children }) => {
   const renderRef = useRef(renders);
   const [details, setDetails] = useState({
     [DETAILS_KEYS.LOCATION]: '',
-    [DETAILS_KEYS.AUTHOR]: AUTHOR_NAMES.AKIRA,
     [DETAILS_KEYS.TRANSLATORS]: getPersonsValue(DETAILS_KEYS.TRANSLATORS),
     [DETAILS_KEYS.EDITORS]: getPersonsValue(DETAILS_KEYS.EDITORS),
   });

@@ -52,7 +52,6 @@ describe('convertText', () => {
     };
     details = {
       [DETAILS_KEYS.LOCATION]: 'Hallway',
-      [DETAILS_KEYS.AUTHOR]: '日日日 (Akira)',
       [DETAILS_KEYS.TRANSLATORS]: [
         { [DETAILS_KEYS.NAME]: 'Mike', [DETAILS_KEYS.LINK]: 'mike' },
       ],
