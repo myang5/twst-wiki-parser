@@ -1,3 +1,5 @@
+import { capitalize } from 'lodash';
+import { RESERVED_LABELS } from '../constants';
 import formatStyling from './formatStyling';
 
 /*
@@ -34,11 +36,11 @@ Evaluate <p>.textContent and then decide from there
 
 /**
  * Helper function for convertText that formats each dialogue line.
- * @param {object} TEMPLATES
+ * @param {object} templates
  * @param {object} renders
  */
 
-export default function formatLine(TEMPLATES, renders) {
+export default function formatLine(templates, renders) {
   let currentName = ''; // needed for case where dialogue has name on every line
   return (p) => {
     const line = p.textContent.replace(/&nbsp;/g, ' ').trim(); // ignore text styling while evaluating lines
@@ -46,46 +48,45 @@ export default function formatLine(TEMPLATES, renders) {
     // -----FILTER OUT FILE NAMES-----
     if (isFileName(line)) {
       currentName = ''; // since its new section
-      return TEMPLATES.cgRender.replace('FILENAME', line.trim());
+      return templates.cgRender(line);
+    }
+    if (isPart(line)) {
+      // TODO: handle this
     }
     // -----PROCESS HEADINGS OR DIALOGUE LINES-----
     p.innerHTML = formatTlMarker(p.innerHTML);
     const firstWord = line.split(' ')[0];
     // -----FILTER OUT DIALOGUE LINES WITH NO LABEL-----
     if (!firstWord.includes(':')) {
-      return `${formatStyling(p).innerHTML}\n\n`;
+      return `\n${formatStyling(p).innerHTML}\n\n`;
     }
     // -----PROCESS LINES WHERE FIRST WORD HAS A ':'-----
     const label = firstWord.replace(':', '');
     // -----FILTER OUT HEADING LINES-----
-    if (label.toUpperCase() === 'HEADING') {
+    if (label.toUpperCase() === RESERVED_LABELS.LOCATION) {
       currentName = ''; // since its new section
-      return TEMPLATES.heading.replace(
-        'HEADING',
+      return templates.locationHeading(
         line.slice(line.indexOf(':') + 1).trim(),
       );
     }
-    // -----FINALLY PROCESS DIALOGUE LINES WITH LABELS-----
-    let dialogue = '';
-    if (label !== currentName) {
-      // if new character is speaking
-      currentName = label;
-      const renderCode = TEMPLATES.dialogueRender;
-      const charName = `${
-        label[0].toUpperCase() + label.slice(1, label.length)
-      }`;
-      dialogue += renderCode.replace('FILENAME', renders[charName].trim());
+    if (label.toUpperCase() === RESERVED_LABELS.HEADING) {
+      currentName = ''; // since its new section
+      return templates.heading(line.slice(line.indexOf(':') + 1).trim());
     }
+    // -----FINALLY PROCESS DIALOGUE LINES WITH LABELS-----
     // evaluate text inside first node of <p> tag
     // might be an element (has styling) or a text node (no styling)
     // so use textContent instead of innerHTML or innerText
     let contents = p.childNodes[0].textContent;
     // remove firstWord (has colon) in case of <strong>Arashi:</strong> line
-    // and also label incase of <strong>Arashi</strong>: line
+    // and then try label in case of <strong>Arashi</strong>: line
     // ERROR: this means colon doesn't get removed if it's not styled....
     // TODO: find a better way to deal with styling on label
+    const originalContents = contents;
     contents = contents.replace(firstWord, '');
-    contents = contents.replace(label, '');
+    if (contents === originalContents) {
+      contents = contents.replace(label, '');
+    }
     if (contents.trim().length === 0) {
       p.childNodes[0].remove();
     } else {
@@ -93,9 +94,14 @@ export default function formatLine(TEMPLATES, renders) {
       // set ChildNode HTML
       p.childNodes[0].textContent = contents;
     }
-    const newLine = formatStyling(p);
-    dialogue += `${newLine.innerHTML.trim()}\n\n`;
-    return dialogue;
+    const newLine = formatStyling(p).innerHTML.trim();
+    if (label !== currentName) {
+      // if new character is speaking
+      currentName = label;
+      return templates.dialogueLine(renders[capitalize(label)], newLine);
+    } else {
+      return `\n${newLine}\n\n`;
+    }
   };
 }
 
@@ -104,7 +110,6 @@ export default function formatLine(TEMPLATES, renders) {
  * @param {string} line
  * @return {boolean}
  */
-
 export function isFileName(line) {
   const extensions = ['.png', '.gif', '.jpg', '.jpeg', '.ico', '.pdf', '.svg'];
   for (let i = 0; i < extensions.length; i++) {
@@ -116,6 +121,16 @@ export function isFileName(line) {
 }
 
 /**
+ * Check if a dialogue line is actually indicating a new part
+ * for a personal story
+ * @param {string} line
+ * @return {boolean}
+ */
+function isPart(line) {
+  return line.trim().match(/PART \d/i);
+}
+
+/**
  * Formats TL note markers into clickable wiki code citation references
  * [1] --> <span id='${title}RefNUM'>[[#${title}NoteNUM|<sup>[NUM]</sup>]]</span>
  * The complicated id format is required for the citations to work with the
@@ -123,7 +138,6 @@ export function isFileName(line) {
  * @param {string} line
  * @return {string} The line with any TL markers formatted
  */
-
 function formatTlMarker(line) {
   if (line.search(/\[\d+\]/) > 0) {
     // Look for TL Markers
