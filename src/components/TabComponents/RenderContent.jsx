@@ -13,8 +13,12 @@ export default function RenderContent() {
   return (
     <>
       <p>
-        Please paste in the file names of the dialogue renders as written in the
-        wiki (ex. Tsukasa Suou School Dialogue Render.png)
+        Please paste in the Story Character template values for each character.
+        Possible values can be found in the{' '}
+        <a href="https://twisted-wonderland.fandom.com/wiki/Template:Story_Character">
+          template documentation
+        </a>
+        .
         <br />
         (This tab will fill out once you paste dialogue into the Text tab)
       </p>
