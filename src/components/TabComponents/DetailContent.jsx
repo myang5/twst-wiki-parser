@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
 import { StateContext } from '../Main/StateContext';
-import { DETAILS_KEYS, STORY_TYPES } from 'Constants';
+import { DETAILS_KEYS, STORY_TYPES, PERSONAL_STORY_NAMES } from 'Constants';
 
 const storyTypes = Object.values(STORY_TYPES);
+const characterNames = Object.keys(PERSONAL_STORY_NAMES).sort();
 
 export default function DetailContent() {
   const { details, setDetails } = useContext(StateContext);
@@ -63,6 +64,30 @@ export default function DetailContent() {
             onChange={handleChange}
           />
         </div>
+        <label htmlFor={DETAILS_KEYS.TITLE}>Title</label>
+        <input
+          type="text"
+          id={DETAILS_KEYS.TITLE}
+          value={details[DETAILS_KEYS.TITLE]}
+          onChange={handleChange}
+        />
+        {details[DETAILS_KEYS.STORY_TYPE] === STORY_TYPES.PERSONAL_STORY && (
+          <>
+            <label htmlFor={DETAILS_KEYS.FEATURED_CHARACTER}>Character</label>
+            <select
+              type="text"
+              id={DETAILS_KEYS.FEATURED_CHARACTER}
+              value={details[DETAILS_KEYS.FEATURED_CHARACTER]}
+              onChange={handleChange}
+            >
+              {characterNames.map((name) => (
+                <option key={name} value={name}>
+                  {PERSONAL_STORY_NAMES[name]}
+                </option>
+              ))}
+            </select>
+          </>
+        )}
       </div>
     </>
   );

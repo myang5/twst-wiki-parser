@@ -1,5 +1,5 @@
 import React, { createContext, useState, useRef } from 'react';
-import { DETAILS_KEYS } from 'Constants';
+import { DETAILS_KEYS, STORY_TYPES } from 'Constants';
 
 export const StateContext = createContext();
 
@@ -15,6 +15,8 @@ export const StateProvider = ({ children }) => {
       JSON.parse(localStorage.getItem(DETAILS_KEYS.TRANSLATOR)) || '',
     [DETAILS_KEYS.TL_LINK]:
       JSON.parse(localStorage.getItem(DETAILS_KEYS.TL_LINK)) || '',
+    [DETAILS_KEYS.STORY_TYPE]: STORY_TYPES.PERSONAL_STORY,
+    [DETAILS_KEYS.TITLE]: '',
   });
   const [nav, setNav] = useState(JSON.parse(localStorage.getItem('nav')) || {});
 

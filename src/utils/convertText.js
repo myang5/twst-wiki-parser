@@ -1,7 +1,13 @@
-import { DETAILS_KEYS, CATEGORY_NAMES, NAV_KEYS } from '../constants/';
+import { capitalize } from 'lodash';
+import {
+  DETAILS_KEYS,
+  CATEGORY_NAMES,
+  NAV_KEYS,
+  STORY_TYPES,
+} from '../constants/';
 import extractBr from './extractBr';
 import convertEditorDataToDom from './convertEditorDataToDom';
-import formatLine, { isFileName } from './formatLine';
+import formatLine from './formatLine';
 import formatStyling from './formatStyling';
 
 /**
@@ -15,32 +21,25 @@ export default function convertText({
   renders,
   details,
   onChangeDetails,
-  nav,
 }) {
   normalizeDetails(details);
   onChangeDetails({ ...details });
+  const { [DETAILS_KEYS.STORY_TYPE]: storyType } = details;
 
   const templates = getTemplates(details);
   const inputDom = extractBr(convertEditorDataToDom(inputData));
 
   updateLocalStorage(DETAILS_KEYS.TRANSLATOR, details[DETAILS_KEYS.TRANSLATOR]);
   updateLocalStorage(DETAILS_KEYS.TL_LINK, details[DETAILS_KEYS.TL_LINK]);
-  updateLocalStorage('nav', nav);
 
   const input = inputDom.querySelectorAll('p');
-  let output = formatTopNavBar(nav);
-
-  output += templates.header();
+  let output =
+    storyType === STORY_TYPES.PERSONAL_STORY
+      ? templates.personalStoryHeader()
+      : '';
 
   let tlMarkerCount = 0; // keep track of count to alert user when count mismatches
   let i = 0;
-
-  // user is allowed to specify the header image as the first line in the input
-  const firstLine = input[0].textContent.trim();
-  if (isFileName(firstLine)) {
-    output = output.replace('HEADERFILE', firstLine);
-    i += 1;
-  }
 
   const formatLineHelper = formatLine(templates, renders);
 
@@ -50,9 +49,7 @@ export default function convertText({
   }
 
   if (tlMarkerCount > 0) output += formatTlNotes(tlNotesData, tlMarkerCount);
-  output += '|}\n';
-  output += formatBottomNavBar(nav);
-  output += formatCategories(Object.keys(renders));
+  output += formatCategories(details, Object.keys(renders));
   return output;
 }
 
@@ -79,7 +76,9 @@ const getTemplates = (details) => {
 
   const templates = {};
 
-  templates.header = () => `{{Personal Story Tabs/${featuredCharacter}}}
+  templates.personalStoryHeader = () => `{{Personal Story Tabs/${capitalize(
+    featuredCharacter,
+  )}}}
 {{FanTL|tl=[${tlLink} ${translator}]|story}}
 {| class="storytable imgfit" width="100%" style="text-align:left"
 |- id="Top"
@@ -205,16 +204,30 @@ function formatTlNotes(tlNotesData, count) {
  * @param {Array<string>} names An Array of character names that appear in the story
  */
 
-export function formatCategories(names) {
+export function formatCategories(details, names) {
+  const {
+    [DETAILS_KEYS.STORY_TYPE]: storyType,
+    [DETAILS_KEYS.FEATURED_CHARACTER]: featuredCharacter,
+  } = details;
+
   let categories = '';
+
+  categories +=
+    storyType === STORY_TYPES.PERSONAL_STORY
+      ? `\n[[Category:Personal Story]]`
+      : '';
+  categories += featuredCharacter
+    ? `\n[[Category:${CATEGORY_NAMES[featuredCharacter]}]]`
+    : '';
+
   // ex. [[Category:Idia Shroud Appearances]]
   // If character name does not have associated appearances
   // category, character is skipped
-  // TODO: add category for story type and main character
   names.forEach((name) => {
-    const fullName = CATEGORY_NAMES[name.toUpperCase()].replace('_', ' ');
+    const fullName = CATEGORY_NAMES[name.toUpperCase()];
     categories += fullName ? `\n[[Category:${fullName} Appearances]]` : '';
   });
+
   return categories;
 }
 

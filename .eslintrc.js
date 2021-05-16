@@ -30,5 +30,6 @@ module.exports = {
     'react/jsx-one-expression-per-line': 0,
     'object-curly-newline': 0,
     'no-disabled-tests': 0,
+    'no-unused-vars': 0,
   },
 };

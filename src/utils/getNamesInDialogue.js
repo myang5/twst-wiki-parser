@@ -1,6 +1,9 @@
-import { capitalize } from 'lodash';
+import { capitalize, includes } from 'lodash';
 import extractBr from './extractBr';
 import convertEditorDataToDom from './convertEditorDataToDom';
+import { RESERVED_LABELS } from '../constants';
+
+const RESERVED_LABELS_ARRAY = Object.values(RESERVED_LABELS);
 
 /**
  * Get the names of the characters in the current dialogue in InputArea component.
@@ -20,10 +23,12 @@ export default function getNamesInDialogue(editorData) {
     // NOTE: current code will not work properly if
     // character name has a space
     let name = line.split(' ')[0];
-    if (name.includes(':') && name.toUpperCase() !== 'HEADING:') {
+    if (name.includes(':')) {
       name = name.slice(0, name.indexOf(':')); // get text up until colon
-      name = capitalize(name);
-      names[name] = '';
+      if (!includes(RESERVED_LABELS_ARRAY, name.toUpperCase())) {
+        name = capitalize(name);
+        names[name] = '';
+      }
     }
   });
   return names;

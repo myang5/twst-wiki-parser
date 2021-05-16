@@ -1,0 +1,4 @@
+export const RESERVED_LABELS = {
+  HEADING: 'HEADING',
+  LOCATION: 'LOCATION',
+};

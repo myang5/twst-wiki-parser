@@ -10,7 +10,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,css}": [
-      "eslint",
+      "eslint -c .eslintrc.prod.js",
       "prettier --write"
     ]
   },
