@@ -6,7 +6,6 @@
     "test": "jest",
     "dev": "webpack-dev-server --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
-    "deploy": "gh-pages -d dist",
     "ncu": "ncu \"/ckeditor/\" -u"
   },
   "repository": {
