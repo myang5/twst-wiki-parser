@@ -3,7 +3,6 @@ import extractBr from './extractBr';
 import convertEditorDataToDom from './convertEditorDataToDom';
 import formatLine, { isFileName } from './formatLine';
 import formatStyling from './formatStyling';
-import getEmptyPersonObject from './getEmptyPersonObject';
 
 /**
  * Formats text into source code for the wiki.
@@ -24,11 +23,8 @@ export default function convertText({
   const templates = getTemplates(details);
   const inputDom = extractBr(convertEditorDataToDom(inputData));
 
-  updateLocalStorage(
-    DETAILS_KEYS.TRANSLATORS,
-    details[DETAILS_KEYS.TRANSLATORS],
-  );
-  updateLocalStorage(DETAILS_KEYS.EDITORS, details[DETAILS_KEYS.EDITORS]);
+  updateLocalStorage(DETAILS_KEYS.TRANSLATOR, details[DETAILS_KEYS.TRANSLATOR]);
+  updateLocalStorage(DETAILS_KEYS.TL_LINK, details[DETAILS_KEYS.TL_LINK]);
   updateLocalStorage('nav', nav);
 
   const input = inputDom.querySelectorAll('p');
@@ -54,8 +50,6 @@ export default function convertText({
   }
 
   if (tlMarkerCount > 0) output += formatTlNotes(tlNotesData, tlMarkerCount);
-  output += templates.translators;
-  output += templates.editors;
   output += '|}\n';
   output += formatBottomNavBar(nav);
   output += formatCategories(Object.keys(renders));
@@ -70,27 +64,7 @@ export default function convertText({
 function normalizeDetails(details) {
   Object.entries(details).forEach((entry) => {
     const [key, value] = entry;
-    if (key === DETAILS_KEYS.TRANSLATORS || key === DETAILS_KEYS.EDITORS) {
-      const personsArr = value.reduce((arr, person) => {
-        const { [DETAILS_KEYS.NAME]: name, [DETAILS_KEYS.LINK]: link } = person;
-        // If the person object is essentially empty, filter it out
-        if (!name && !link) return arr;
-        // Else trim the string values
-        person[DETAILS_KEYS.NAME] = name.trim();
-        person[DETAILS_KEYS.LINK] = link.trim();
-        arr.push(person);
-        return arr;
-      }, []);
-      // UI needs at least one empty person object to render properly
-      if (personsArr.length === 0) personsArr.push(getEmptyPersonObject());
-      details[key] = personsArr;
-    } else {
-      details[key] = value.trim();
-    }
-    // add # character to color if it does not exist
-    if (key.endsWith('Col')) {
-      details[key] = value.startsWith('#') ? value : `#${value}`;
-    }
+    details[key] = value.trim();
   });
 }
 

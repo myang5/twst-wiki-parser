@@ -1,11 +1,7 @@
 import React, { createContext, useState, useRef } from 'react';
 import { DETAILS_KEYS } from 'Constants';
-import getEmptyPersonObject from 'Utils/getEmptyPersonObject';
 
 export const StateContext = createContext();
-
-const getPersonsValue = (key) =>
-  JSON.parse(localStorage.getItem(key)) || [getEmptyPersonObject()];
 
 export const StateProvider = ({ children }) => {
   const [renders, setRenders] = useState({});
@@ -15,8 +11,10 @@ export const StateProvider = ({ children }) => {
   const renderRef = useRef(renders);
   const [details, setDetails] = useState({
     [DETAILS_KEYS.LOCATION]: '',
-    [DETAILS_KEYS.TRANSLATORS]: getPersonsValue(DETAILS_KEYS.TRANSLATORS),
-    [DETAILS_KEYS.EDITORS]: getPersonsValue(DETAILS_KEYS.EDITORS),
+    [DETAILS_KEYS.TRANSLATOR]:
+      JSON.parse(localStorage.getItem(DETAILS_KEYS.TRANSLATOR)) || '',
+    [DETAILS_KEYS.TL_LINK]:
+      JSON.parse(localStorage.getItem(DETAILS_KEYS.TL_LINK)) || '',
   });
   const [nav, setNav] = useState(JSON.parse(localStorage.getItem('nav')) || {});
 
