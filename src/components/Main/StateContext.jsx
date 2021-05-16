@@ -1,5 +1,5 @@
 import React, { createContext, useState, useRef } from 'react';
-import { COLORS_KEYS, DETAILS_KEYS } from 'Constants';
+import { DETAILS_KEYS } from 'Constants';
 import getEmptyPersonObject from 'Utils/getEmptyPersonObject';
 
 export const StateContext = createContext();
@@ -18,12 +18,6 @@ export const StateProvider = ({ children }) => {
     [DETAILS_KEYS.TRANSLATORS]: getPersonsValue(DETAILS_KEYS.TRANSLATORS),
     [DETAILS_KEYS.EDITORS]: getPersonsValue(DETAILS_KEYS.EDITORS),
   });
-  const [colors, setColors] = useState({
-    [COLORS_KEYS.WRITER]: '#FFFFFF',
-    [COLORS_KEYS.LOCATION]: '#FFFFFF',
-    [COLORS_KEYS.BOTTOM]: '#FFFFFF',
-    [COLORS_KEYS.TEXT]: '#FFFFFF',
-  });
   const [nav, setNav] = useState(JSON.parse(localStorage.getItem('nav')) || {});
 
   // create refs for each CKEditor to pass into EditorContext
@@ -36,8 +30,6 @@ export const StateProvider = ({ children }) => {
     setRenders,
     details,
     setDetails,
-    colors,
-    setColors,
     nav,
     setNav,
     inputRef,

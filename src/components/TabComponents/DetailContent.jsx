@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { StateContext } from '../Main/StateContext';
 import { DETAILS_KEYS } from 'Constants';
-import ColorContent from './ColorContent';
 
 export default function DetailContent() {
   const { details, setDetails } = useContext(StateContext);
@@ -37,7 +36,6 @@ export default function DetailContent() {
         details={details}
         onChange={setDetails}
       />
-      <ColorContent />
     </>
   );
 }

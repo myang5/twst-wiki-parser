@@ -16,13 +16,12 @@ export default function convertText({
   renders,
   details,
   onChangeDetails,
-  colors,
   nav,
 }) {
   normalizeDetails(details);
   onChangeDetails({ ...details });
 
-  const templates = getTemplates(details, colors);
+  const templates = getTemplates(details);
   const inputDom = extractBr(convertEditorDataToDom(inputData));
 
   updateLocalStorage(

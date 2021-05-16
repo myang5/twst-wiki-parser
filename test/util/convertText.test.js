@@ -1,4 +1,4 @@
-import { COLORS_KEYS, DETAILS_KEYS, NAV_KEYS } from '../../src/constants';
+import { DETAILS_KEYS, NAV_KEYS } from '../../src/constants';
 import convertText from '../../src/utils/convertText';
 
 /*
@@ -38,7 +38,6 @@ describe('convertText', () => {
   let tlNotesData;
   let renders;
   let details;
-  let colors;
   let nav;
 
   beforeEach(() => {
@@ -58,12 +57,6 @@ describe('convertText', () => {
       [DETAILS_KEYS.EDITORS]: [
         { [DETAILS_KEYS.NAME]: 'Jay', [DETAILS_KEYS.LINK]: 'jay' },
       ],
-    };
-    colors = {
-      [COLORS_KEYS.WRITER]: '#FFFFFF',
-      [COLORS_KEYS.LOCATION]: '#FFFFFF',
-      [COLORS_KEYS.BOTTOM]: '#FFFFFF',
-      [COLORS_KEYS.TEXT]: '#FFFFFF',
     };
     nav = {
       [NAV_KEYS.NAME]: 'Euthanasia',
@@ -121,7 +114,6 @@ hello again
       renders,
       details,
       onChangeDetails: () => {},
-      colors,
       nav,
     });
     expect(output).toEqual(expected);
