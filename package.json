@@ -8,6 +8,12 @@
     "build": "webpack --config webpack.prod.js",
     "ncu": "ncu \"/ckeditor/\" -u"
   },
+  "lint-staged": {
+    "*.{js,jsx,css,less}": [
+      "eslint",
+      "prettier --write"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/myang5/twst-wiki-parser.git"
@@ -67,6 +73,10 @@
   },
   "devDependencies": {
     "classnames": "^2.3.1",
-    "less-loader": "^7.3.0"
+    "eslint-config-prettier": "^8.3.0",
+    "husky": "^6.0.0",
+    "less-loader": "^7.3.0",
+    "lint-staged": "^11.0.0",
+    "prettier": "^2.3.0"
   }
 }

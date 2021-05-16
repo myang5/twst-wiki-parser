@@ -5,7 +5,12 @@ module.exports = {
     node: true,
     'jest/globals': true,
   },
-  extends: ['plugin:react/recommended', 'plugin:jest/recommended', 'airbnb'],
+  extends: [
+    'plugin:react/recommended',
+    'plugin:jest/recommended',
+    'eslint:recommended',
+    'prettier',
+  ],
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
