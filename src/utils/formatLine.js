@@ -1,4 +1,3 @@
-import { NAME_LINKS } from '../constants';
 import formatStyling from './formatStyling';
 
 /*
@@ -67,41 +66,36 @@ export default function formatLine(TEMPLATES, renders) {
       );
     }
     // -----FINALLY PROCESS DIALOGUE LINES WITH LABELS-----
-    if (NAME_LINKS[label.toUpperCase()] !== undefined) {
-      // if valid character is speaking
-      let dialogue = '';
-      if (label !== currentName) {
-        // if new character is speaking
-        currentName = label;
-        const renderCode = TEMPLATES.dialogueRender;
-        // create id to access chara's render file in Renders tab
-        const charName = `${
-          label[0].toUpperCase() + label.slice(1, label.length)
-        }`;
-        dialogue += renderCode.replace('FILENAME', renders[charName].trim());
-      }
-      // evaluate text inside first node of <p> tag
-      // might be an element (has styling) or a text node (no styling)
-      // so use textContent instead of innerHTML or innerText
-      let contents = p.childNodes[0].textContent;
-      // remove firstWord (has colon) in case of <strong>Arashi:</strong> line
-      // and also label incase of <strong>Arashi</strong>: line
-      // ERROR: this means colon doesn't get removed if it's not styled....
-      // TODO: find a better way to deal with styling on label
-      contents = contents.replace(firstWord, '');
-      contents = contents.replace(label, '');
-      if (contents.trim().length === 0) {
-        p.childNodes[0].remove();
-      } else {
-        // if first ChildNode was just the label then remove node
-        // set ChildNode HTML
-        p.childNodes[0].textContent = contents;
-      }
-      const newLine = formatStyling(p);
-      dialogue += `${newLine.innerHTML.trim()}\n\n`;
-      return dialogue;
+    let dialogue = '';
+    if (label !== currentName) {
+      // if new character is speaking
+      currentName = label;
+      const renderCode = TEMPLATES.dialogueRender;
+      const charName = `${
+        label[0].toUpperCase() + label.slice(1, label.length)
+      }`;
+      dialogue += renderCode.replace('FILENAME', renders[charName].trim());
     }
-    return '';
+    // evaluate text inside first node of <p> tag
+    // might be an element (has styling) or a text node (no styling)
+    // so use textContent instead of innerHTML or innerText
+    let contents = p.childNodes[0].textContent;
+    // remove firstWord (has colon) in case of <strong>Arashi:</strong> line
+    // and also label incase of <strong>Arashi</strong>: line
+    // ERROR: this means colon doesn't get removed if it's not styled....
+    // TODO: find a better way to deal with styling on label
+    contents = contents.replace(firstWord, '');
+    contents = contents.replace(label, '');
+    if (contents.trim().length === 0) {
+      p.childNodes[0].remove();
+    } else {
+      // if first ChildNode was just the label then remove node
+      // set ChildNode HTML
+      p.childNodes[0].textContent = contents;
+    }
+    const newLine = formatStyling(p);
+    dialogue += `${newLine.innerHTML.trim()}\n\n`;
+    return dialogue;
   };
 }
 

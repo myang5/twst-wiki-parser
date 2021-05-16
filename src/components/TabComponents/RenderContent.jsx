@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { StateContext } from '../Main/StateContext';
-import { NAME_LINKS } from 'Constants';
 
 export default function RenderContent() {
   const { renderRef, renders, setRenders } = useContext(StateContext);
@@ -25,7 +24,6 @@ export default function RenderContent() {
             key={name}
             name={name}
             value={render}
-            link={NAME_LINKS[name.toUpperCase()]}
             onChange={handleChange}
           />
         ))}
@@ -34,25 +32,13 @@ export default function RenderContent() {
   );
 }
 
-function RenderRow({ name, link, value, onChange }) {
+function RenderRow({ name, value, onChange }) {
   return (
     <div className="row">
       <label htmlFor={name} className="row__spacer">
-        <RenderLink link={link} name={name} />
+        {name}
       </label>
       <input id={name} onChange={onChange} value={value} />
     </div>
-  );
-}
-
-function RenderLink({ name, link }) {
-  return (
-    <a
-      target="_blank"
-      rel="noreferrer"
-      href={`http://ensemble-stars.wikia.com/wiki/${link}/Gallery#Render`}
-    >
-      {name}
-    </a>
   );
 }

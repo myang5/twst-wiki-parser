@@ -1,8 +1,7 @@
 import {
   COLORS_KEYS,
   DETAILS_KEYS,
-  GAME_OPTIONS,
-  NAME_LINKS,
+  CATEGORY_NAMES,
   NAV_KEYS,
 } from '../constants/';
 import extractBr from './extractBr';
@@ -283,19 +282,18 @@ function formatTlNotes(tlNotesData, count) {
 
 /**
  * Helper function to add the category tags at the end of the dialogue
- * @param {string} author The author of the story
  * @param {Array<string>} names An Array of character names that appear in the story
- * @param {string} whatGame The game the story belongs to (either ES! or ES!!)
  */
 
-export function formatCategories(author, names, whatGame) {
-  let categories = `[[Category:${author}]]`;
-  // [[Category:<full name> - Story]] (for ! stories)
-  // [[Category:<full name> - Story !!]] (for !! stories)`;
+export function formatCategories(names) {
+  let categories = '';
+  // ex. [[Category:Idia Shroud Appearances]]
+  // If character name does not have associated appearances
+  // category, character is skipped
+  // TODO: add category for story type and main character
   names.forEach((name) => {
-    const fullName = NAME_LINKS[name.toUpperCase()].replace('_', ' ');
-    const game = whatGame === GAME_OPTIONS.GAME2 ? 'Story !!' : 'Story';
-    categories += `\n[[Category:${fullName} - ${game}]]`;
+    const fullName = CATEGORY_NAMES[name.toUpperCase()].replace('_', ' ');
+    categories += fullName ? `\n[[Category:${fullName} Appearances]]` : '';
   });
   return categories;
 }
