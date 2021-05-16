@@ -1,10 +1,5 @@
 import React, { createContext, useState, useRef } from 'react';
-import {
-  AUTHOR_NAMES,
-  COLORS_KEYS,
-  DETAILS_KEYS,
-  GAME_OPTIONS,
-} from 'Constants';
+import { AUTHOR_NAMES, COLORS_KEYS, DETAILS_KEYS } from 'Constants';
 import getEmptyPersonObject from 'Utils/getEmptyPersonObject';
 
 export const StateContext = createContext();
@@ -23,7 +18,6 @@ export const StateProvider = ({ children }) => {
     [DETAILS_KEYS.AUTHOR]: AUTHOR_NAMES.AKIRA,
     [DETAILS_KEYS.TRANSLATORS]: getPersonsValue(DETAILS_KEYS.TRANSLATORS),
     [DETAILS_KEYS.EDITORS]: getPersonsValue(DETAILS_KEYS.EDITORS),
-    [DETAILS_KEYS.WHAT_GAME]: GAME_OPTIONS.GAME2,
   });
   const [colors, setColors] = useState({
     [COLORS_KEYS.WRITER]: '#FFFFFF',

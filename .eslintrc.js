@@ -18,7 +18,7 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: 'module',
   },
-  plugins: ['react', 'jest'],
+  plugins: ['react', 'jest', 'jsx-a11y'],
   rules: {
     'linebreak-style': 0,
     'eol-last': 0,
@@ -26,7 +26,7 @@ module.exports = {
     'no-use-before-define': 0,
     'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
     'react/prop-types': 0,
-    'jsx-a11y/label-has-associated-control': [2, { assert: 'either' }],
+    'jsx-a11y/label-has-associated-control': 0,
     'react/jsx-one-expression-per-line': 0,
     'object-curly-newline': 0,
     'no-disabled-tests': 0,

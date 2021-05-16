@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { StateContext } from '../Main/StateContext';
-import { AUTHOR_NAMES, DETAILS_KEYS, GAME_OPTIONS } from 'Constants';
+import { AUTHOR_NAMES, DETAILS_KEYS } from 'Constants';
 import ColorContent from './ColorContent';
 
 const authors = Object.values(AUTHOR_NAMES);
@@ -13,13 +13,6 @@ export default function DetailContent() {
       target: { id, value },
     } = e;
     setDetails({ ...details, [id]: value });
-  };
-
-  const handleGameChange = (e) => {
-    const {
-      target: { value },
-    } = e;
-    setDetails({ ...details, [DETAILS_KEYS.WHAT_GAME]: value });
   };
 
   return (
@@ -62,33 +55,6 @@ export default function DetailContent() {
         details={details}
         onChange={setDetails}
       />
-      <div className="row">
-        <label className="row__spacer" htmlFor={DETAILS_KEYS.WHAT_GAME}>
-          Game
-        </label>
-        <input
-          type="radio"
-          name={DETAILS_KEYS.WHAT_GAME}
-          value={GAME_OPTIONS.GAME2}
-          id={GAME_OPTIONS.GAME2}
-          checked={details[DETAILS_KEYS.WHAT_GAME] === GAME_OPTIONS.GAME2}
-          onChange={handleGameChange}
-        />
-        <label className="label--radio" htmlFor={GAME_OPTIONS.GAME2}>
-          ES!!
-        </label>
-        <input
-          type="radio"
-          name={DETAILS_KEYS.WHAT_GAME}
-          value={GAME_OPTIONS.GAME1}
-          id={GAME_OPTIONS.GAME1}
-          checked={details[DETAILS_KEYS.WHAT_GAME] === GAME_OPTIONS.GAME1}
-          onChange={handleGameChange}
-        />
-        <label className="label--radio" htmlFor={GAME_OPTIONS.GAME1}>
-          ES!
-        </label>
-      </div>
       <ColorContent />
     </>
   );

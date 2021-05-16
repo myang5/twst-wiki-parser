@@ -1,9 +1,4 @@
-import {
-  COLORS_KEYS,
-  DETAILS_KEYS,
-  GAME_OPTIONS,
-  NAV_KEYS,
-} from '../../src/constants';
+import { COLORS_KEYS, DETAILS_KEYS, NAV_KEYS } from '../../src/constants';
 import convertText from '../../src/utils/convertText';
 
 /*
@@ -64,7 +59,6 @@ describe('convertText', () => {
       [DETAILS_KEYS.EDITORS]: [
         { [DETAILS_KEYS.NAME]: 'Jay', [DETAILS_KEYS.LINK]: 'jay' },
       ],
-      [DETAILS_KEYS.WHAT_GAME]: GAME_OPTIONS.GAME2,
     };
     colors = {
       [COLORS_KEYS.WRITER]: '#FFFFFF',

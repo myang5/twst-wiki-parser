@@ -67,7 +67,6 @@ export default function convertText({
   output += formatCategories(
     details[DETAILS_KEYS.AUTHOR],
     Object.keys(renders),
-    details[DETAILS_KEYS.WHAT_GAME],
   );
   return output;
 }

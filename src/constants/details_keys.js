@@ -7,5 +7,4 @@ export const DETAILS_KEYS = {
   LINK: 'link',
   EDITOR: 'editor',
   ED_LINK: 'edLink',
-  WHAT_GAME: 'whatGame',
 };
