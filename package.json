@@ -9,7 +9,7 @@
     "ncu": "ncu \"/ckeditor/\" -u"
   },
   "lint-staged": {
-    "*.{js,jsx,css,less}": [
+    "*.{js,jsx,css}": [
       "eslint",
       "prettier --write"
     ]

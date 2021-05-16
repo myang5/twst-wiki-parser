@@ -22,7 +22,7 @@ export default function RenderContent() {
         <br />
         (This tab will fill out once you paste dialogue into the Text tab)
       </p>
-      <div id="renderForms">
+      <div className="tab-content__grid">
         {Object.entries(renders).map(([name, render]) => (
           <RenderRow
             key={name}
@@ -38,11 +38,9 @@ export default function RenderContent() {
 
 function RenderRow({ name, value, onChange }) {
   return (
-    <div className="row">
-      <label htmlFor={name} className="row__spacer">
-        {name}
-      </label>
+    <>
+      <label htmlFor={name}>{name}</label>
       <input id={name} onChange={onChange} value={value} />
-    </div>
+    </>
   );
 }

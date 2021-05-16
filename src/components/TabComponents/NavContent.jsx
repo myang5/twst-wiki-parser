@@ -27,32 +27,22 @@ function NavContent() {
         </a>{' '}
         on the wiki.
       </p>
-      <div className="row">
-        <label className="row__spacer" htmlFor={NAV_KEYS.NAME}>
-          Story Name
-        </label>
+      <div className="tab-content__grid">
+        <label htmlFor={NAV_KEYS.NAME}>Story Name</label>
         <input
           type="text"
           id={NAV_KEYS.NAME}
           value={nav[NAV_KEYS.NAME]}
           onChange={handleChange}
         />
-      </div>
-      <div className="row">
-        <label className="row__spacer" htmlFor={NAV_KEYS.PREV}>
-          Prev
-        </label>
+        <label htmlFor={NAV_KEYS.PREV}>Prev</label>
         <input
           type="text"
           id={NAV_KEYS.PREV}
           value={nav[NAV_KEYS.PREV]}
           onChange={handleChange}
         />
-      </div>
-      <div className="row">
-        <label className="row__spacer" htmlFor={NAV_KEYS.NEXT}>
-          Next
-        </label>
+        <label htmlFor={NAV_KEYS.NEXT}>Next</label>
         <input
           type="text"
           id={NAV_KEYS.NEXT}

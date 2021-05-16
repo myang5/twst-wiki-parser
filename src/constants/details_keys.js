@@ -1,5 +1,5 @@
 export const DETAILS_KEYS = {
-  LOCATION: 'location',
+  STORY_TYPE: 'storyType',
   TRANSLATOR: 'translator',
   TL_LINK: 'tlLink',
 };
