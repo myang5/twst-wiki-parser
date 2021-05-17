@@ -33,8 +33,7 @@ export default function convertText({
   const templates = getTemplates(details);
   const inputDom = extractBr(convertEditorDataToDom(inputData));
 
-  updateLocalStorage(DETAILS_KEYS.TRANSLATOR, details[DETAILS_KEYS.TRANSLATOR]);
-  updateLocalStorage(DETAILS_KEYS.TL_LINK, details[DETAILS_KEYS.TL_LINK]);
+  localStorage.setItem('details', JSON.stringify(details));
 
   const input = inputDom.querySelectorAll('p');
 
@@ -142,19 +141,6 @@ const getTemplates = (details) => {
 `;
   return templates;
 };
-
-/**
- * Save value in localStorage at specified key
- * @param {string} key
- * @param {string} value
- */
-function updateLocalStorage(key, value) {
-  if (value.length === 0) {
-    localStorage.removeItem(key);
-  } else if (JSON.stringify(value) !== localStorage.getItem(key)) {
-    localStorage.setItem(key, JSON.stringify(value));
-  }
-}
 
 /**
  * Get the number of TL markers in the dialogue line
