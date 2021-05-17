@@ -22,6 +22,7 @@ export default function getNamesInDialogue(editorData) {
   lines.forEach((line) => {
     // NOTE: current code will not work properly if
     // character name has a space
+    // TODO: handle names with any number words for NPCs
     let name = line.split(' ')[0];
     if (name.includes(':')) {
       name = name.slice(0, name.indexOf(':')); // get text up until colon

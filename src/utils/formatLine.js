@@ -51,7 +51,7 @@ export default function formatLine(templates, renders) {
       return templates.cgRender(line);
     }
     if (isPart(line)) {
-      // TODO: handle this
+      // TODO: handle multiple parts
     }
     // -----PROCESS HEADINGS OR DIALOGUE LINES-----
     p.innerHTML = formatTlMarker(p.innerHTML);
@@ -73,6 +73,7 @@ export default function formatLine(templates, renders) {
       currentName = ''; // since its new section
       return templates.heading(line.slice(line.indexOf(':') + 1).trim());
     }
+    // TODO: handle choice dialogue
     // -----FINALLY PROCESS DIALOGUE LINES WITH LABELS-----
     // evaluate text inside first node of <p> tag
     // might be an element (has styling) or a text node (no styling)
@@ -82,6 +83,7 @@ export default function formatLine(templates, renders) {
     // and then try label in case of <strong>Arashi</strong>: line
     // ERROR: this means colon doesn't get removed if it's not styled....
     // TODO: find a better way to deal with styling on label
+    // TODO: handle NPCs
     const originalContents = contents;
     contents = contents.replace(firstWord, '');
     if (contents === originalContents) {

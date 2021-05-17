@@ -118,16 +118,20 @@ const getTemplates = (details) => {
   templates.locationHeading = (location) => `|-
 | colspan="3" class="secondaryheader"|${location}
 `;
-  templates.firstDialogueLine = (render, line) => `|-
-| width="10%" |{{Story Character|${render}}}
-| colspan="2" |${line}
+  templates.heading = (heading) => `|-
+| colspan="3" style="text-align:center;padding:2em"|${heading}
 `;
   templates.dialogueLine = (render, line) => `|-
 |{{Story Character|${render}}}
 | colspan="2" |${line}
 `;
-  templates.heading = (heading) => `|-
-| colspan="3" style="text-align:center;padding:2em"|${heading}
+  templates.npcDialogueLine = (name, line) => `|-
+| class="character" style="padding:3em" |${name}
+| colspan="2" |${line}
+`;
+  templates.choice = (choice1, choice2) => `|-
+| colspan="2" class="choice" |${choice1}
+| class="choice" width="50%" |${choice2}
 `;
   templates.personalStoryFooter = (fullName) => `|-
 | colspan="3" class="bottomnav" |✦ [[${fullName}/Personal Story|Main]] ✦
