@@ -45,14 +45,19 @@ header {
       &:after {
         content: '★';
         position: absolute;
-        top: -0.04em;
         right: -0.5em;
         /* editing position of star after title */
-        @media (min-width: 22rem) and (max-width: 37.5em) {
+        @media (min-width: 0px) {
+          top: 4.07em;
+        }
+        @media (min-width: 409px) {
+          top: 2.7em;
+        }
+        @media (min-width: 517px) {
           top: 1.33em;
         }
-        @media (max-width: 22rem) {
-          top: 2.7em;
+        @media (min-width: 967px) {
+          top: -0.04em;
         }
       }
       &:hover:after {
@@ -94,11 +99,12 @@ header {
   }
 }
 
-/* resize header */
+/* Resize header as viewport gets narrower */
 @media (max-width: 37.5em) {
   header {
     .horizontal {
       flex-direction: column;
+      align-items: center;
     }
 
     p {
