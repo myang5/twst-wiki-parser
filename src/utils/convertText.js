@@ -1,10 +1,5 @@
 import { capitalize } from 'lodash';
-import {
-  DETAILS_KEYS,
-  CATEGORY_NAMES,
-  NAV_KEYS,
-  STORY_TYPES,
-} from '../constants/';
+import { DETAILS_KEYS, CATEGORY_NAMES, STORY_TYPES } from '../constants/';
 import extractBr from './extractBr';
 import convertEditorDataToDom from './convertEditorDataToDom';
 import formatLine from './formatLine';
@@ -250,30 +245,4 @@ export function formatCategories(details, names) {
   });
 
   return categories;
-}
-
-function formatNavBarBase(nav) {
-  let output = `{{StoryNavBar
-|name = ${nav[NAV_KEYS.NAME]}
-`;
-  if (nav[NAV_KEYS.PREV]) {
-    output += `|prev = ${nav[NAV_KEYS.PREV]}\n`;
-  }
-  if (nav[NAV_KEYS.NEXT]) {
-    output += `|next = ${nav[NAV_KEYS.NEXT]}\n`;
-  }
-  return output;
-}
-
-export function formatTopNavBar(nav) {
-  let output = formatNavBarBase(nav);
-  output += '}}\n';
-  return output;
-}
-
-export function formatBottomNavBar(nav) {
-  let output = formatNavBarBase(nav);
-  output += `|chapter list = {{:${nav[NAV_KEYS.NAME]}/Chapters}}\n`;
-  output += '}}\n';
-  return output;
 }

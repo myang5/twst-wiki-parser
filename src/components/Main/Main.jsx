@@ -4,7 +4,6 @@ import {
   TabMenu,
   TabContent,
   InputEditor,
-  NavContent,
   DetailContent,
   RenderContent,
   TLNotesContent,
@@ -14,7 +13,6 @@ import './Main.less';
 
 const TABS = {
   TEXT: 'Text',
-  NAV: 'Story Nav',
   DETAILS: 'Details',
   RENDERS: 'Renders',
   TL_NOTES: 'TL Notes',
@@ -43,9 +41,6 @@ const Input = () => {
       <TabMenu {...{ tabs: tabTitles, clicked, onClick: setClicked }} />
       <TabContent {...{ value: TABS.TEXT, clicked }}>
         <InputEditor />
-      </TabContent>
-      <TabContent {...{ value: TABS.NAV, clicked }}>
-        <NavContent />
       </TabContent>
       <TabContent {...{ value: TABS.DETAILS, clicked }}>
         <DetailContent />
