@@ -1,4 +1,4 @@
-import { RESERVED_LABELS } from '../constants';
+import { RESERVED_LABELS, STORY_TYPES } from '../constants';
 import formatStyling from './formatStyling';
 import capitalizeName from './capitalizeName';
 
@@ -40,7 +40,12 @@ Evaluate <p>.textContent and then decide from there
  * @param {object} renders
  */
 
-export default function formatLine(templates, renders) {
+export default function formatLine({
+  templates,
+  renders,
+  outputObj,
+  storyType,
+}) {
   let currentName = ''; // needed for case where dialogue has name on every line
   return (p) => {
     const line = p.textContent.replace(/&nbsp;/g, ' ').trim(); // ignore text styling while evaluating lines
@@ -51,7 +56,24 @@ export default function formatLine(templates, renders) {
       return templates.cgRender(line);
     }
     if (isPart(line)) {
-      // TODO: handle multiple parts
+      outputObj.partCount += 1;
+      if (outputObj.partCount === 1) {
+        outputObj.output = outputObj.output.replace(
+          templates.tabberHeaderPlaceholder(),
+          templates.tabberHeader() + templates.firstPartLine(),
+        );
+        return '';
+      } else {
+        currentName = '';
+        return (
+          (storyType === STORY_TYPES.PERSONAL_STORY
+            ? templates.personalStoryFooter()
+            : '') +
+          templates.tableEnd() +
+          templates.partLine(outputObj.partCount) +
+          templates.tableStart()
+        );
+      }
     }
     // -----PROCESS HEADINGS OR DIALOGUE LINES-----
     p.innerHTML = formatTlMarker(p.innerHTML);
@@ -132,7 +154,7 @@ export function isFileName(line) {
  * @return {boolean}
  */
 function isPart(line) {
-  return line.trim().match(/PART \d/i);
+  return line.trim().match(/^PART \d/i);
 }
 
 /**

@@ -5,8 +5,6 @@ import convertEditorDataToDom from './convertEditorDataToDom';
 import formatLine from './formatLine';
 import formatStyling from './formatStyling';
 
-const TABBER_PLACEHOLDER = 'tabber-placeholder';
-
 /**
  * Formats text into source code for the wiki.
  * @return {string} The formatted text as a string to be placed in the output textarea
@@ -20,10 +18,7 @@ export default function convertText({
 }) {
   normalizeDetails(details);
   onChangeDetails({ ...details });
-  const {
-    [DETAILS_KEYS.STORY_TYPE]: storyType,
-    [DETAILS_KEYS.FEATURED_CHARACTER]: featuredCharacter,
-  } = details;
+  const { [DETAILS_KEYS.STORY_TYPE]: storyType } = details;
 
   const templates = getTemplates(details);
   const inputDom = extractBr(convertEditorDataToDom(inputData));
@@ -37,27 +32,38 @@ export default function convertText({
     storyType === STORY_TYPES.PERSONAL_STORY
       ? templates.personalStoryHeader()
       : '';
-  output += `${TABBER_PLACEHOLDER}\n`;
+  output += templates.tabberHeaderPlaceholder();
   output += templates.tableStart();
 
   let tlMarkerCount = 0; // keep track of count to alert user when count mismatches
-  const formatLineHelper = formatLine(templates, renders);
+  const outputObj = { output, partCount: 0 };
+  const formatLineHelper = formatLine({
+    templates,
+    renders,
+    outputObj,
+    storyType,
+  });
 
   for (let i = 0; i < input.length; i++) {
     tlMarkerCount += countTlMarkers(input[i].textContent);
-    output += formatLineHelper(input[i]);
+    // Need to separate the next two steps so that formaLineHelper
+    // is able to grab and replace output
+    const lineResult = formatLineHelper(input[i]);
+    outputObj.output += lineResult;
   }
+
+  output = outputObj.output;
 
   if (tlMarkerCount > 0) output += formatTlNotes(tlNotesData, tlMarkerCount);
 
   output +=
     storyType === STORY_TYPES.PERSONAL_STORY
-      ? templates.personalStoryFooter(CATEGORY_NAMES[featuredCharacter])
+      ? templates.personalStoryFooter()
       : '';
   output += templates.tableEnd();
 
-  if (output.includes(TABBER_PLACEHOLDER)) {
-    output = output.replace(`${TABBER_PLACEHOLDER}\n`, '');
+  if (output.includes(templates.tabberHeaderPlaceholder())) {
+    output = output.replace(templates.tabberHeaderPlaceholder(), '');
   } else {
     // If tabber placeholder was replaced, that means the code
     // for tabberHeader was used, and tabber needs to be closed out
@@ -101,8 +107,14 @@ const getTemplates = (details) => {
 ! colspan="3" |${title}
 |}
 `;
+  templates.tabberHeaderPlaceholder = () => `tabber-placeholder
+`;
   templates.tabberHeader =
     () => `<div class="themedtabber imgtabber" align="center"><Tabber>
+`;
+  templates.firstPartLine = () => `Part 1=
+`;
+  templates.partLine = (number) => `|-|Part ${number}=
 `;
   templates.tableStart =
     () => `{| class="storytable imgfit" width="100%" style="text-align:left"
@@ -128,8 +140,8 @@ const getTemplates = (details) => {
 | colspan="2" class="choice" |${choice1}
 | class="choice" width="50%" |${choice2}
 `;
-  templates.personalStoryFooter = (fullName) => `|-
-| colspan="3" class="bottomnav" |✦ [[${fullName}/Personal Story|Main]] ✦
+  templates.personalStoryFooter = () => `|-
+| colspan="3" class="bottomnav" |✦ [[${CATEGORY_NAMES[featuredCharacter]}/Personal Story|Main]] ✦
 |-
 | colspan="3" style="text-align:center;" |[[#Top|Jump to top]]
 |-

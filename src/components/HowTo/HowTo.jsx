@@ -1,6 +1,7 @@
 import React from 'react';
 import list from 'Assets/list.png';
 import headingExample from 'Assets/headingExample.png';
+import partExample from 'Assets/partExample.png';
 import './HowTo.less';
 
 export default function HowTo() {
@@ -40,6 +41,25 @@ export default function HowTo() {
             <strong>Links</strong> - Links should also be preserved when pasted
             in. Make sure every link is like an external one &#40;i.e. with the
             https:// in front&#41;.
+          </li>
+          <li>
+            <strong>Stories with multiple parts</strong> - To indicate that the
+            story needs to be tabbed out into multiple parts like this:
+            <br />
+            <img alt="Different parts example" src={partExample} />
+            <br />
+            use a line that says &quot;Part 1&quot;, &quot;Part 2&quot;, etc. to
+            indicate the dialogue following the line is in its own part:
+            <blockquote>
+              Part 1<br />
+              Character: Some dialogue
+              <br />
+              Part 2<br />
+              Character: Some more dialogue
+            </blockquote>
+            If a story only has one part, do not specify &quot;Part 1&quot; in
+            the text or the formatter will unnecessarily add code for the parts
+            tabber.
           </li>
         </ul>
         <p>Here&apos;s an example of a short dialogue:</p>
