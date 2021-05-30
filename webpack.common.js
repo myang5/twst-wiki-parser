@@ -42,7 +42,7 @@ module.exports = {
     new MiniCssExtractPlugin({ filename: '[name].css' }),
     new HtmlWebpackPlugin({
       template: 'src/index.html',
-      favicon: 'src/assets/favicon.ico',
+      favicon: 'src/assets/favicon.png',
       alwaysWriteToDisk: true,
     }),
     new HtmlWebpackHarddiskPlugin(),
