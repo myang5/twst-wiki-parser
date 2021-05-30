@@ -1,4 +1,4 @@
-import { DETAILS_KEYS, NAV_KEYS } from '../../src/constants';
+import { DETAILS_KEYS, STORY_TYPES } from '../../src/constants';
 import convertText from '../../src/utils/convertText';
 
 /*
@@ -38,83 +38,79 @@ describe('convertText', () => {
   let tlNotesData;
   let renders;
   let details;
-  let nav;
 
   beforeEach(() => {
     inputData =
-      '<p>HEADER.PNG</p><p>Arashi: hello</p><p>Ritsu: hello</p><p>some cg.png</p><p>Arashi: hello again</p>';
+      '<p>Part 1</p><p>Bg 64207.png</p><p>Location: Dwarfs’ Mine - Campsite</p><p>Heading: —Day 2: Camp Vargas.</p><p>Jamil: This is a line said by Jamil (the line starts with his name followed by a colon).</p><p>This is another line said by Jamil.</p><p>Part 2</p><p>Floyd: This is a line said by Floyd instead <strong>with some emphasis.</strong></p><p>Some Random NPC: Hello</p>';
     tlNotesData =
       '<p>If this is your first time using the formatter, please check the <a href="./howto.html#tlNotesSection">Text Guidelines</a> for how to add translation notes.</p>';
     renders = {
-      Arashi: 'arashi.png',
-      Ritsu: 'ritsu.png',
+      Jamil: 'Jamil School',
+      Floyd: 'Floyd School',
     };
     details = {
-      [DETAILS_KEYS.LOCATION]: 'Hallway',
-      [DETAILS_KEYS.TRANSLATORS]: [
-        { [DETAILS_KEYS.NAME]: 'Mike', [DETAILS_KEYS.LINK]: 'mike' },
-      ],
-      [DETAILS_KEYS.EDITORS]: [
-        { [DETAILS_KEYS.NAME]: 'Jay', [DETAILS_KEYS.LINK]: 'jay' },
-      ],
-    };
-    nav = {
-      [NAV_KEYS.NAME]: 'Euthanasia',
-      [NAV_KEYS.PREV]: 'Prologue',
-      [NAV_KEYS.NEXT]: '2',
+      [DETAILS_KEYS.STORY_TYPE]: STORY_TYPES.PERSONAL_STORY,
+      [DETAILS_KEYS.TRANSLATOR]: 'Mandy',
+      [DETAILS_KEYS.TL_LINK]: 'https://mandytl.dreamwidth.org/28341.html',
+      [DETAILS_KEYS.TITLE]: 'Test Title',
+      [DETAILS_KEYS.FEATURED_CHARACTER]: 'FLOYD',
     };
   });
 
   test('still works', () => {
-    const expected = `{{StoryNavBar
-|name = Euthanasia
-|prev = Prologue
-|next = 2
-}}
-{| class="article-table" cellspacing="1/6" cellpadding="2" border="1" align="center" width="100%"
-! colspan="2" style="text-align:center;background-color:#FFFFFF; color:#FFFFFF;" |'''Writer:''' 日日日 (Akira)
-|-
-| colspan="2" |[[File:HEADER.PNG|660px|link=|center]]
-|-
-! colspan="2" style="text-align:center;background-color:#FFFFFF; color:#FFFFFF;" |'''Location: Hallway'''
-|-
-|[[File:arashi.png|x200px|link=|center]]
-|
-hello
-
-|-
-|[[File:ritsu.png|x200px|link=|center]]
-|
-hello
-
-|-
-! colspan="2" style="text-align:center;" |[[File:some cg.png|center|link=|660px]]
-|-
-|[[File:arashi.png|x200px|link=|center]]
-|
-hello again
-
-|-
-! colspan="2" style="text-align:center;background-color:#FFFFFF;color:#FFFFFF;" |'''Translation: {{inLink|User:mike|Mike|#FFFFFF}} '''
-|-
-! colspan="2" style="text-align:center;background-color:#FFFFFF;color:#FFFFFF;" |'''Proofreading: {{inLink|User:jay|Jay|#FFFFFF}} '''
+    const expected = `{{Personal Story Tabs/Floyd}}
+{{FanTL|tl=[https://mandytl.dreamwidth.org/28341.html Mandy]|story}}
+{| class="storytable imgfit" width="100%" style="text-align:left"
+|- id="Top"
+! colspan="3" |Test Title
 |}
-{{StoryNavBar
-|name = Euthanasia
-|prev = Prologue
-|next = 2
-|chapter list = {{:Euthanasia/Chapters}}
-}}
-[[Category:日日日 (Akira)]]
-[[Category:Arashi Narukami - Story !!]]
-[[Category:Ritsu Sakuma - Story !!]]`;
+<div class="themedtabber imgtabber" align="center"><Tabber>
+Part 1=
+{| class="storytable imgfit" width="100%" style="text-align:left"
+|-
+| colspan="3" |[[File:Bg 64207.png]]
+|-
+| colspan="3" class="secondaryheader"|Dwarfs’ Mine - Campsite
+|-
+| colspan="3" style="text-align:center;padding:2em"|—Day 2: Camp Vargas.
+|-
+|{{Story Character|Jamil School}}
+| colspan="2" |This is a line said by Jamil (the line starts with his name followed by a colon).
+
+This is another line said by Jamil.
+
+|-
+| colspan="3" class="bottomnav" |✦ [[Floyd Leech/Personal Story|Main]] ✦
+|-
+| colspan="3" style="text-align:center;" |[[#Top|Jump to top]]
+|-
+|}
+|-|Part 2=
+{| class="storytable imgfit" width="100%" style="text-align:left"
+|-
+|{{Story Character|Floyd School}}
+| colspan="2" |This is a line said by Floyd instead '''with some emphasis.'''
+|-
+| class="character" style="padding:3em" |Some Random NPC
+| colspan="2" |Hello
+|-
+| colspan="3" class="bottomnav" |✦ [[Floyd Leech/Personal Story|Main]] ✦
+|-
+| colspan="3" style="text-align:center;" |[[#Top|Jump to top]]
+|-
+|}
+</Tabber></div>
+
+[[Category:Personal Story]]
+[[Category:Floyd Leech]]
+[[Category:Jamil Viper Appearances]]
+[[Category:Floyd Leech Appearances]]`;
     const output = convertText({
       inputData,
       tlNotesData,
       renders,
       details,
       onChangeDetails: () => {},
-      nav,
     });
     expect(output).toEqual(expected);
   });
