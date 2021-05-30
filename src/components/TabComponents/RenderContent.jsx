@@ -15,12 +15,19 @@ export default function RenderContent() {
       <p>
         Please paste in the Story Character template values for each character.
         Possible values can be found in the{' '}
-        <a href="https://twisted-wonderland.fandom.com/wiki/Template:Story_Character">
+        <a
+          target="_blank"
+          rel="noreferrer"
+          href="https://twisted-wonderland.fandom.com/wiki/Template:Story_Character"
+        >
           template documentation
-        </a>
-        .
+        </a>{' '}
+        (This tab will fill out once you paste dialogue into the Text tab).
         <br />
-        (This tab will fill out once you paste dialogue into the Text tab)
+        <strong>
+          Dialogue from characters with blank inputs will be formatted like
+          NPCs.
+        </strong>
       </p>
       <div className="tab-content__grid">
         {Object.entries(renders).map(([name, render]) => (

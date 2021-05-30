@@ -80,7 +80,7 @@ export default function DetailContent() {
               value={details[DETAILS_KEYS.FEATURED_CHARACTER]}
               onChange={handleChange}
             >
-              <option disabled selected value>
+              <option disabled value>
                 - Select a character -
               </option>
               {characterNames.map((name) => (

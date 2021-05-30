@@ -54,7 +54,8 @@ export function InputEditor() {
       <p>Heading: —Day 2: Camp Vargas.</p>
       <p>Jamil: This is a line said by Jamil (the line starts with his name followed by a colon).</p>
       <p>This is another line said by Jamil.</p>
-      <p>Floyd: This is a line said by Floyd instead <strong>with some emphasis.</strong></p>`;
+      <p>Floyd: This is a line said by Floyd instead <strong>with some emphasis.</strong></p>
+      <p>Some Random NPC: Hello`;
 
   useEffect(() => {
     // Grab the HTML element using ref.current.editor

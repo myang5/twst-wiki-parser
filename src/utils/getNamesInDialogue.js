@@ -1,6 +1,7 @@
-import { capitalize, includes } from 'lodash';
+import { includes } from 'lodash';
 import extractBr from './extractBr';
 import convertEditorDataToDom from './convertEditorDataToDom';
+import capitalizeName from './capitalizeName';
 import { RESERVED_LABELS } from '../constants';
 
 const RESERVED_LABELS_ARRAY = Object.values(RESERVED_LABELS);
@@ -20,15 +21,12 @@ export default function getNamesInDialogue(editorData) {
   );
   const names = {};
   lines.forEach((line) => {
-    // NOTE: current code will not work properly if
-    // character name has a space
-    // TODO: handle names with any number words for NPCs
-    let name = line.split(' ')[0];
-    if (name.includes(':')) {
-      name = name.slice(0, name.indexOf(':')); // get text up until colon
+    // TODO: Need to figure how to handle when dialogue line itself just has
+    // a colon in it with no label lol
+    if (line.includes(':')) {
+      let name = line.split(':')[0].trim();
       if (!includes(RESERVED_LABELS_ARRAY, name.toUpperCase())) {
-        name = capitalize(name);
-        names[name] = '';
+        names[capitalizeName(name)] = '';
       }
     }
   });

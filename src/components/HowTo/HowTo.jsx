@@ -22,9 +22,9 @@ export default function HowTo() {
           </li>
           <li>
             <strong>Headings</strong> - You can indicate scene changes in the
-            dialogue by including a line that starts with
-            `&quot;Location:`&quot;, and mid-dialogue headings with a line that
-            starts with `&quot;Heading:`&quot;. For example, the following text:
+            dialogue by including a line that starts with &quot;Location:&quot;,
+            and mid-dialogue headings with a line that starts with
+            &quot;Heading:&quot;. For example, the following text:
             <blockquote>
               Location: Dwarfs’ Mine - Campsite <br />
               Heading: —Day 2: Camp Vargas.
@@ -91,6 +91,11 @@ export default function HowTo() {
           the dialogue, with a text input next to each name. Fill in the file
           names of the renders that should be used for each character. (ex.
           Leona Dorm)
+        </p>
+        <p>
+          If the character is an NPC with no dedicated image, just leave the
+          input blank and the parser will format the line with the code for
+          NPCs.
         </p>
         <p>
           If you want to use more than one render per character in one chapter,

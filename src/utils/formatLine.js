@@ -1,6 +1,6 @@
-import { capitalize } from 'lodash';
 import { RESERVED_LABELS } from '../constants';
 import formatStyling from './formatStyling';
+import capitalizeName from './capitalizeName';
 
 /*
 How formatter converts text (a rough summary)
@@ -55,21 +55,20 @@ export default function formatLine(templates, renders) {
     }
     // -----PROCESS HEADINGS OR DIALOGUE LINES-----
     p.innerHTML = formatTlMarker(p.innerHTML);
-    const firstWord = line.split(' ')[0];
     // -----FILTER OUT DIALOGUE LINES WITH NO LABEL-----
-    if (!firstWord.includes(':')) {
+    // TODO: handle dialogue lines that simply have a colon lol
+    if (!line.includes(':')) {
       return `\n${formatStyling(p).innerHTML}\n\n`;
     }
-    // -----PROCESS LINES WHERE FIRST WORD HAS A ':'-----
-    const label = firstWord.replace(':', '');
+    const label = line.split(':')[0];
     // -----FILTER OUT HEADING LINES-----
-    if (label.toUpperCase() === RESERVED_LABELS.LOCATION) {
+    if (label.trim().toUpperCase() === RESERVED_LABELS.LOCATION) {
       currentName = ''; // since its new section
       return templates.locationHeading(
         line.slice(line.indexOf(':') + 1).trim(),
       );
     }
-    if (label.toUpperCase() === RESERVED_LABELS.HEADING) {
+    if (label.trim().toUpperCase() === RESERVED_LABELS.HEADING) {
       currentName = ''; // since its new section
       return templates.heading(line.slice(line.indexOf(':') + 1).trim());
     }
@@ -83,9 +82,8 @@ export default function formatLine(templates, renders) {
     // and then try label in case of <strong>Arashi</strong>: line
     // ERROR: this means colon doesn't get removed if it's not styled....
     // TODO: find a better way to deal with styling on label
-    // TODO: handle NPCs
     const originalContents = contents;
-    contents = contents.replace(firstWord, '');
+    contents = contents.replace(label + ':', '');
     if (contents === originalContents) {
       contents = contents.replace(label, '');
     }
@@ -100,7 +98,12 @@ export default function formatLine(templates, renders) {
     if (label !== currentName) {
       // if new character is speaking
       currentName = label;
-      return templates.dialogueLine(renders[capitalize(label)], newLine);
+      const name = capitalizeName(currentName);
+      if (renders[name]) {
+        return templates.dialogueLine(renders[name], newLine);
+      } else {
+        return templates.npcDialogueLine(currentName, newLine);
+      }
     } else {
       return `\n${newLine}\n\n`;
     }
