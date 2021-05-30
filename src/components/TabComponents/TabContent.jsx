@@ -11,7 +11,7 @@ export default function TabContent({ clicked, value, children }) {
         `tab-content--${value.replace(' ', '-').toLowerCase()}`,
         {
           'tab-content--active': clicked === value,
-        }
+        },
       )}
     >
       {children}

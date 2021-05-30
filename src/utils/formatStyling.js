@@ -5,13 +5,13 @@
  */
 
 export default function formatStyling(editorDom) {
-  editorDom.querySelectorAll('strong').forEach(strong => {
+  editorDom.querySelectorAll('strong').forEach((strong) => {
     strong.replaceWith(`'''${strong.textContent}'''`);
   });
-  editorDom.querySelectorAll('i').forEach(italic => {
+  editorDom.querySelectorAll('i').forEach((italic) => {
     italic.replaceWith(`''${italic.textContent}''`);
   });
-  editorDom.querySelectorAll('a').forEach(link => {
+  editorDom.querySelectorAll('a').forEach((link) => {
     link.replaceWith(`[${link.href} ${link.textContent}]`);
   });
   return editorDom;

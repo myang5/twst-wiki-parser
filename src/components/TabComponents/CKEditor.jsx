@@ -49,12 +49,13 @@ export function InputEditor() {
   const inputEditorData = `<p>If this is your first time using the formatter, please check the <a href='/#/howto'>Text Guidelines</a> to make
         sure your text is ready.</p>
       <p>---EXAMPLE DIALOGUE---</p>
-      <p>The header image.png</p>
-      <p><strong>Person A:</strong> This is a line said by Person A! Their line starts with their name followed by a colon.</p>
-      <p><strong>Person B:</strong> This is a line said by another person!</p>
-      <p>Heading: Location: Hallway (will format to "Location: Hallway")</p>
-      <p>A screenshot of the game.jpeg</p>
-      <p><strong>Person A:</strong> Another line from Person A.</p>`;
+      <p>Bg 64207.png</p>
+      <p>Location: Dwarfs’ Mine - Campsite</p>
+      <p>Heading: —Day 2: Camp Vargas.</p>
+      <p>Jamil: This is a line said by Jamil (the line starts with his name followed by a colon).</p>
+      <p>This is another line said by Jamil.</p>
+      <p>Floyd: This is a line said by Floyd instead <strong>with some emphasis.</strong></p>
+      <p>Some Random NPC: Hello`;
 
   useEffect(() => {
     // Grab the HTML element using ref.current.editor
@@ -63,7 +64,7 @@ export function InputEditor() {
       writer.setAttribute(
         'spellcheck',
         'false',
-        inputRef.current.editor.editing.view.document.getRoot()
+        inputRef.current.editor.editing.view.document.getRoot(),
       );
     });
   }, []);
@@ -98,7 +99,7 @@ export function TLNotesEditor() {
       writer.setAttribute(
         'spellcheck',
         'false',
-        tlNotesRef.current.editor.editing.view.document.getRoot()
+        tlNotesRef.current.editor.editing.view.document.getRoot(),
       );
     });
   }, []);

@@ -8,7 +8,7 @@ export default function Header() {
   const desc = (
     <>
       A website to more easily upload event/gacha stories from the mobile idol
-      game Ensemble Stars to the fandom wiki.
+      game Twisted Wonderland to the fandom wiki.
       <br />
       It formats your story chapter into text that can be pasted directly into
       the &quot;source&quot; section of the page.
@@ -29,7 +29,7 @@ export default function Header() {
     <header>
       <h1>
         <Link className="star-link" to="/">
-          ENSTARS STORY FORMATTER
+          TWISTED WONDERLAND STORY FORMATTER
         </Link>
       </h1>
       <div className="horizontal">
@@ -45,7 +45,7 @@ export default function Header() {
               className="star-link"
               target="_blank"
               rel="noreferrer"
-              href="https://github.com/myang5/enstars-wiki-parser/issues"
+              href="https://github.com/myang5/twst-wiki-parser/issues"
             >
               KNOWN ISSUES
             </a>
@@ -65,7 +65,7 @@ export default function Header() {
               className="star-link"
               target="_blank"
               rel="noreferrer"
-              href="https://github.com/myang5/enstars-wiki-parser"
+              href="https://github.com/myang5/twst-wiki-parser"
             >
               GITHUB
             </a>

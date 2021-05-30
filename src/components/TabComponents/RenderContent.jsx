@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { StateContext } from '../Main/StateContext';
-import { NAME_LINKS } from 'Constants';
 
 export default function RenderContent() {
   const { renderRef, renders, setRenders } = useContext(StateContext);
@@ -14,18 +13,28 @@ export default function RenderContent() {
   return (
     <>
       <p>
-        Please paste in the file names of the dialogue renders as written in the
-        wiki (ex. Tsukasa Suou School Dialogue Render.png)
+        Please paste in the Story Character template values for each character.
+        Possible values can be found in the{' '}
+        <a
+          target="_blank"
+          rel="noreferrer"
+          href="https://twisted-wonderland.fandom.com/wiki/Template:Story_Character"
+        >
+          template documentation
+        </a>{' '}
+        (This tab will fill out once you paste dialogue into the Text tab).
         <br />
-        (This tab will fill out once you paste dialogue into the Text tab)
+        <strong>
+          Dialogue from characters with blank inputs will be formatted like
+          NPCs.
+        </strong>
       </p>
-      <div id="renderForms">
+      <div className="tab-content__grid">
         {Object.entries(renders).map(([name, render]) => (
           <RenderRow
             key={name}
             name={name}
             value={render}
-            link={NAME_LINKS[name.toUpperCase()]}
             onChange={handleChange}
           />
         ))}
@@ -34,25 +43,11 @@ export default function RenderContent() {
   );
 }
 
-function RenderRow({ name, link, value, onChange }) {
+function RenderRow({ name, value, onChange }) {
   return (
-    <div className="row">
-      <label htmlFor={name} className="row__spacer">
-        <RenderLink link={link} name={name} />
-      </label>
+    <>
+      <label htmlFor={name}>{name}</label>
       <input id={name} onChange={onChange} value={value} />
-    </div>
-  );
-}
-
-function RenderLink({ name, link }) {
-  return (
-    <a
-      target="_blank"
-      rel="noreferrer"
-      href={`http://ensemble-stars.wikia.com/wiki/${link}/Gallery#Render`}
-    >
-      {name}
-    </a>
+    </>
   );
 }

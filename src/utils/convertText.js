@@ -1,75 +1,77 @@
-import {
-  COLORS_KEYS,
-  DETAILS_KEYS,
-  GAME_OPTIONS,
-  NAME_LINKS,
-  NAV_KEYS,
-} from '../constants/';
+import { capitalize } from 'lodash';
+import { DETAILS_KEYS, CATEGORY_NAMES, STORY_TYPES } from '../constants/';
 import extractBr from './extractBr';
 import convertEditorDataToDom from './convertEditorDataToDom';
-import formatLine, { isFileName } from './formatLine';
+import formatLine from './formatLine';
 import formatStyling from './formatStyling';
-import getEmptyPersonObject from './getEmptyPersonObject';
 
 /**
  * Formats text into source code for the wiki.
  * @return {string} The formatted text as a string to be placed in the output textarea
  */
-
 export default function convertText({
   inputData,
   tlNotesData,
   renders,
   details,
   onChangeDetails,
-  colors,
-  nav,
 }) {
   normalizeDetails(details);
   onChangeDetails({ ...details });
+  const { [DETAILS_KEYS.STORY_TYPE]: storyType } = details;
 
-  const TEMPLATES = getTemplates(details, colors);
+  const templates = getTemplates(details);
   const inputDom = extractBr(convertEditorDataToDom(inputData));
 
-  updateLocalStorage(
-    DETAILS_KEYS.TRANSLATORS,
-    details[DETAILS_KEYS.TRANSLATORS]
-  );
-  updateLocalStorage(DETAILS_KEYS.EDITORS, details[DETAILS_KEYS.EDITORS]);
-  updateLocalStorage('nav', nav);
+  localStorage.setItem('details', JSON.stringify(details));
 
   const input = inputDom.querySelectorAll('p');
-  let output = formatTopNavBar(nav);
 
-  output += TEMPLATES.header;
+  // TODO: add header for event story
+  let output =
+    storyType === STORY_TYPES.PERSONAL_STORY
+      ? templates.personalStoryHeader()
+      : '';
+  output += templates.tabberHeaderPlaceholder();
+  output += templates.tableStart();
 
   let tlMarkerCount = 0; // keep track of count to alert user when count mismatches
-  let i = 0;
+  const outputObj = { output, partCount: 0 };
+  const formatLineHelper = formatLine({
+    templates,
+    renders,
+    outputObj,
+    storyType,
+  });
 
-  // user is allowed to specify the header image as the first line in the input
-  const firstLine = input[0].textContent.trim();
-  if (isFileName(firstLine)) {
-    output = output.replace('HEADERFILE', firstLine);
-    i += 1;
-  }
-
-  const formatLineHelper = formatLine(TEMPLATES, renders);
-
-  for (i; i < input.length; i++) {
+  for (let i = 0; i < input.length; i++) {
     tlMarkerCount += countTlMarkers(input[i].textContent);
-    output += formatLineHelper(input[i]);
+    // Need to separate the next two steps so that formaLineHelper
+    // is able to grab and replace output
+    const lineResult = formatLineHelper(input[i]);
+    outputObj.output += lineResult;
   }
+
+  output = outputObj.output;
 
   if (tlMarkerCount > 0) output += formatTlNotes(tlNotesData, tlMarkerCount);
-  output += TEMPLATES.translators;
-  output += TEMPLATES.editors;
-  output += '|}\n';
-  output += formatBottomNavBar(nav);
-  output += formatCategories(
-    details[DETAILS_KEYS.AUTHOR],
-    Object.keys(renders),
-    details[DETAILS_KEYS.WHAT_GAME]
-  );
+
+  output +=
+    storyType === STORY_TYPES.PERSONAL_STORY
+      ? templates.personalStoryFooter()
+      : '';
+  output += templates.tableEnd();
+
+  if (output.includes(templates.tabberHeaderPlaceholder())) {
+    output = output.replace(templates.tabberHeaderPlaceholder(), '');
+  } else {
+    // If tabber placeholder was replaced, that means the code
+    // for tabberHeader was used, and tabber needs to be closed out
+    output += templates.tabberFooter();
+  }
+
+  output += formatCategories(details, Object.keys(renders));
+
   return output;
 }
 
@@ -81,131 +83,75 @@ export default function convertText({
 function normalizeDetails(details) {
   Object.entries(details).forEach((entry) => {
     const [key, value] = entry;
-    if (key === DETAILS_KEYS.TRANSLATORS || key === DETAILS_KEYS.EDITORS) {
-      const personsArr = value.reduce((arr, person) => {
-        const { [DETAILS_KEYS.NAME]: name, [DETAILS_KEYS.LINK]: link } = person;
-        // If the person object is essentially empty, filter it out
-        if (!name && !link) return arr;
-        // Else trim the string values
-        person[DETAILS_KEYS.NAME] = name.trim();
-        person[DETAILS_KEYS.LINK] = link.trim();
-        arr.push(person);
-        return arr;
-      }, []);
-      // UI needs at least one empty person object to render properly
-      if (personsArr.length === 0) personsArr.push(getEmptyPersonObject());
-      details[key] = personsArr;
-    } else {
-      details[key] = value.trim();
-    }
-    // add # character to color if it does not exist
-    if (key.endsWith('Col')) {
-      details[key] = value.startsWith('#') ? value : `#${value}`;
-    }
+    details[key] = value.trim();
   });
 }
-
-// Helpers for getTemplates
-const externalLinkTemplate = (link, text, color) =>
-  `{{Link|${link}|${text}|${color}}}`;
-
-const internalLinkTemplate = (userName, name, color) =>
-  `{{inLink|User:${userName}|${name}|${color}}}`;
-
-const getPersonsTemplate = ({
-  persons,
-  personsTypeDetailKey,
-  textCol,
-  bottomCol,
-}) => {
-  const resultText = persons.reduce((result, person) => {
-    const { [DETAILS_KEYS.NAME]: name, [DETAILS_KEYS.LINK]: link } = person;
-    if (!name && !link) return result;
-    if (result.length !== 0) {
-      result += ', ';
-    }
-    result += !link
-      ? name
-      : link.startsWith('http')
-      ? externalLinkTemplate(link, name, textCol)
-      : internalLinkTemplate(link, name, textCol);
-
-    return result;
-  }, '');
-  if (resultText.length === 0) return resultText;
-  const label =
-    personsTypeDetailKey === DETAILS_KEYS.TRANSLATORS
-      ? 'Translation'
-      : 'Proofreading';
-  return `|-
-! colspan="2" style="text-align:center;background-color:${bottomCol};color:${textCol};" |'''${label}: ${resultText} '''
-`;
-};
 
 /**
  * Helper function to format the wiki code for story header and footer
  * with the user input
- * Also saves certain values in localStorage for user convenience
- * @param {{string: String, string: String}} details Object containing values from the Details tab
- * @param {} colors Object containing the colors from
+ * @param {Object} details
  * @return {Object} Object containing the wikia syntax to use as templates
  */
-const getTemplates = (details, colors) => {
-  const { location, author, translators, editors } = details;
-  const {
-    [COLORS_KEYS.WRITER]: writerCol,
-    [COLORS_KEYS.LOCATION]: locationCol,
-    [COLORS_KEYS.BOTTOM]: bottomCol,
-    [COLORS_KEYS.TEXT]: textCol,
-  } = colors;
+const getTemplates = (details) => {
+  const { featuredCharacter, translator, tlLink, title } = details;
 
   const templates = {};
 
-  templates.header = `{| class="article-table" cellspacing="1/6" cellpadding="2" border="1" align="center" width="100%"
-! colspan="2" style="text-align:center;background-color:${writerCol}; color:${textCol};" |'''Writer:''' ${author}
+  templates.personalStoryHeader = () => `{{Personal Story Tabs/${capitalize(
+    featuredCharacter,
+  )}}}
+{{FanTL|tl=[${tlLink} ${translator}]|story}}
+{| class="storytable imgfit" width="100%" style="text-align:left"
+|- id="Top"
+! colspan="3" |${title}
+|}
+`;
+  templates.tabberHeaderPlaceholder = () => `tabber-placeholder
+`;
+  templates.tabberHeader =
+    () => `<div class="themedtabber imgtabber" align="center"><Tabber>
+`;
+  templates.firstPartLine = () => `Part 1=
+`;
+  templates.partLine = (number) => `|-|Part ${number}=
+`;
+  templates.tableStart =
+    () => `{| class="storytable imgfit" width="100%" style="text-align:left"
+`;
+  templates.cgRender = (filename) => `|-
+| colspan="3" |[[File:${filename}]]
+`;
+  templates.locationHeading = (location) => `|-
+| colspan="3" class="secondaryheader"|${location}
+`;
+  templates.heading = (heading) => `|-
+| colspan="3" style="text-align:center;padding:2em"|${heading}
+`;
+  templates.dialogueLine = (render, line) => `|-
+|{{Story Character|${render}}}
+| colspan="2" |${line}
+`;
+  templates.npcDialogueLine = (name, line) => `|-
+| class="character" style="padding:3em" |${name}
+| colspan="2" |${line}
+`;
+  templates.choice = (choice1, choice2) => `|-
+| colspan="2" class="choice" |${choice1}
+| class="choice" width="50%" |${choice2}
+`;
+  templates.personalStoryFooter = () => `|-
+| colspan="3" class="bottomnav" |✦ [[${CATEGORY_NAMES[featuredCharacter]}/Personal Story|Main]] ✦
 |-
-| colspan="2" |[[File:HEADERFILE|660px|link=|center]]
+| colspan="3" style="text-align:center;" |[[#Top|Jump to top]]
 |-
-! colspan="2" style="text-align:center;background-color:${locationCol}; color:${textCol};" |'''Location: ${location}'''
 `;
-  templates.dialogueRender = `|-
-|[[File:FILENAME|x200px|link=|center]]
-|
+  templates.tableEnd = () => `|}
 `;
-  templates.cgRender = `|-
-! colspan="2" style="text-align:center;" |[[File:FILENAME|center|link=|660px]]
+  templates.tabberFooter = () => `</Tabber></div>
 `;
-  templates.heading = `|-
-! colspan="2" style="text-align:center;background-color:${locationCol}; color:${textCol};" |'''HEADING'''
-`;
-  templates.translators = getPersonsTemplate({
-    persons: translators,
-    personsTypeDetailKey: DETAILS_KEYS.TRANSLATORS,
-    textCol,
-    bottomCol,
-  });
-  templates.editors = getPersonsTemplate({
-    persons: editors,
-    personsTypeDetailKey: DETAILS_KEYS.EDITORS,
-    textCol,
-    bottomCol,
-  });
-
   return templates;
 };
-
-/**
- * Save value in localStorage at specified key
- * @param {string} key
- * @param {string} value
- */
-function updateLocalStorage(key, value) {
-  if (value.length === 0) {
-    localStorage.removeItem(key);
-  } else if (JSON.stringify(value) !== localStorage.getItem(key)) {
-    localStorage.setItem(key, JSON.stringify(value));
-  }
-}
 
 /**
  * Get the number of TL markers in the dialogue line
@@ -245,7 +191,7 @@ function formatTlNotes(tlNotesData, count) {
       if (dom.body.firstChild.tagName.toUpperCase() === 'OL') {
         let listItems = Array.from(dom.querySelectorAll('li'));
         listItems = listItems.map((item) =>
-          item.textContent.replace(/&nbsp;/g, ' ').trim()
+          item.textContent.replace(/&nbsp;/g, ' ').trim(),
         );
         notes = listItems.filter((item) => item.trim().length > 0); // filter out empty lines
       }
@@ -283,45 +229,32 @@ function formatTlNotes(tlNotesData, count) {
 
 /**
  * Helper function to add the category tags at the end of the dialogue
- * @param {string} author The author of the story
  * @param {Array<string>} names An Array of character names that appear in the story
- * @param {string} whatGame The game the story belongs to (either ES! or ES!!)
  */
 
-export function formatCategories(author, names, whatGame) {
-  let categories = `[[Category:${author}]]`;
-  // [[Category:<full name> - Story]] (for ! stories)
-  // [[Category:<full name> - Story !!]] (for !! stories)`;
+export function formatCategories(details, names) {
+  const {
+    [DETAILS_KEYS.STORY_TYPE]: storyType,
+    [DETAILS_KEYS.FEATURED_CHARACTER]: featuredCharacter,
+  } = details;
+
+  let categories = '';
+
+  categories +=
+    storyType === STORY_TYPES.PERSONAL_STORY
+      ? `\n[[Category:Personal Story]]`
+      : '';
+  categories += featuredCharacter
+    ? `\n[[Category:${CATEGORY_NAMES[featuredCharacter]}]]`
+    : '';
+
+  // ex. [[Category:Idia Shroud Appearances]]
+  // If character name does not have associated appearances
+  // category, character is skipped
   names.forEach((name) => {
-    const fullName = NAME_LINKS[name.toUpperCase()].replace('_', ' ');
-    const game = whatGame === GAME_OPTIONS.GAME2 ? 'Story !!' : 'Story';
-    categories += `\n[[Category:${fullName} - ${game}]]`;
+    const fullName = CATEGORY_NAMES[name.toUpperCase()];
+    categories += fullName ? `\n[[Category:${fullName} Appearances]]` : '';
   });
+
   return categories;
-}
-
-function formatNavBarBase(nav) {
-  let output = `{{StoryNavBar
-|name = ${nav[NAV_KEYS.NAME]}
-`;
-  if (nav[NAV_KEYS.PREV]) {
-    output += `|prev = ${nav[NAV_KEYS.PREV]}\n`;
-  }
-  if (nav[NAV_KEYS.NEXT]) {
-    output += `|next = ${nav[NAV_KEYS.NEXT]}\n`;
-  }
-  return output;
-}
-
-export function formatTopNavBar(nav) {
-  let output = formatNavBarBase(nav);
-  output += '}}\n';
-  return output;
-}
-
-export function formatBottomNavBar(nav) {
-  let output = formatNavBarBase(nav);
-  output += `|chapter list = {{:${nav[NAV_KEYS.NAME]}/Chapters}}\n`;
-  output += '}}\n';
-  return output;
 }
