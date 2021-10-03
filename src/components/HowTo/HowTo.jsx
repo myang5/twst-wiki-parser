@@ -17,7 +17,7 @@ export default function HowTo() {
             images by inserting the EXACT file name &#40;ex. Bg 10101.png&#41;
             into the dialogue on its own line. A list of all background images
             can be found here:{' '}
-            <a href="https://twisted-wonderland.fandom.com/wiki/Category:Story_Background_Images">
+            <a href="https://twistedwonderland.miraheze.org/wiki/Category:Story_Background_Images">
               Story Background Images
             </a>
           </li>
