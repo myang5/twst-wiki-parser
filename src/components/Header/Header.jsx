@@ -2,26 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './Header.less';
 
-const lastUpdated = '5/8/21';
-
 export default function Header() {
   const desc = (
     <>
-      A website to more easily upload event/gacha stories from the mobile idol
-      game Twisted Wonderland to the fandom wiki.
+      A website to more easily upload stories from the mobile game Twisted
+      Wonderland to the wiki.
       <br />
       It formats your story chapter into text that can be pasted directly into
       the &quot;source&quot; section of the page.
-      <br />
-      {'Developed by '}
-      <a
-        target="_blank"
-        rel="noreferrer"
-        href="https://twitter.com/gayandasleep"
-      >
-        midori
-      </a>
-      {` (last updated ${lastUpdated}).`}
     </>
   );
 
