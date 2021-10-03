@@ -18,6 +18,7 @@ export function InputEditor() {
   // get refs from EditorContext to provide to CKEditor components
   // refer to Main.js code
   const { renderRef, setRenders, inputRef } = useContext(StateContext);
+  console.log(window.location.href);
 
   // updates the dialogue render inputs when content of InputArea changes
   const updateNames = (editor) => {
@@ -46,7 +47,9 @@ export function InputEditor() {
     },
   };
 
-  const inputEditorData = `<p>If this is your first time using the formatter, please check the <a href='/#/howto'>Text Guidelines</a> to make
+  const inputEditorData = `<p>If this is your first time using the formatter, please check the <a href='${
+    window.location.href + 'howto'
+  }'>Text Guidelines</a> to make
         sure your text is ready.</p>
       <p>---EXAMPLE DIALOGUE---</p>
       <p>Bg 64207.png</p>
