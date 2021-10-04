@@ -84,15 +84,11 @@ export function TLNotesEditor() {
   // get refs from EditorContext to provide to CKEditor components
   // refer to Main.js code
   const { tlNotesRef } = useContext(StateContext);
-  const howToLink = window.location.href + 'howto';
 
   const tlNotesEditorConfig = {
     plugins: [Bold, Italic, Link, List, PasteFromOffice, Essentials, Paragraph],
     toolbar: ['bold', 'italic', 'link', 'numberedList', '|', 'undo', 'redo'],
   };
-
-  const tlNotesEditorData = `<p>If this is your first time using the formatter, please check the <a href='${howToLink}'>Text
-     Guidelines</a> for how to add translation notes.</p>`;
 
   useEffect(() => {
     // Grab the HTML element using ref.current.editor
@@ -110,7 +106,6 @@ export function TLNotesEditor() {
     <CKEditor
       editor={BalloonEditor}
       config={tlNotesEditorConfig}
-      data={tlNotesEditorData}
       ref={tlNotesRef}
     />
   );

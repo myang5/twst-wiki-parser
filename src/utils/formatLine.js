@@ -13,6 +13,7 @@ export default function formatLine({
   renders,
   outputObj,
   storyType,
+  tlNotes,
 }) {
   let currentName = ''; // needed for case where dialogue has name on every line
   return (p) => {
@@ -49,7 +50,7 @@ export default function formatLine({
     }
     // -----PROCESS HEADINGS OR DIALOGUE LINES-----
 
-    p.innerHTML = formatTlMarker(p.innerHTML);
+    p.innerHTML = formatTlMarker({ line: p.innerHTML, outputObj, tlNotes });
 
     // TODO: handle dialogue lines that simply have a colon lol
     if (!line.includes(':')) {
@@ -131,32 +132,12 @@ function isPart(line) {
   return line.trim().match(/^PART \d/i);
 }
 
-/**
- * Formats TL note markers into clickable wiki code citation references
- * [1] --> <span id='${title}RefNUM'>[[#${title}NoteNUM|<sup>[NUM]</sup>]]</span>
- * The complicated id format is required for the citations to work with the
- * story page's tabview, since each tab may have multiple citations with the same number
- * @param {string} line
- * @return {string} The line with any TL markers formatted
- */
-function formatTlMarker(line) {
-  if (line.search(/\[\d+\]/) > 0) {
-    // Look for TL Markers
-    const title = document.querySelector('#title').value;
-    if (title.length > 0) {
-      const markers = line.match(/\[\d+\]/g);
-      markers.forEach((marker) => {
-        const num = marker.substring(
-          marker.indexOf('[') + 1,
-          marker.indexOf(']'),
-        );
-        const tlCode = `<span id='${title}Ref${num}'>[[#${title}Note${num}|<sup>[${num}]</sup>]]</span>`;
-        line = line.replace(marker, tlCode);
-      });
-    } else {
-      document.querySelector('.error').innerHTML =
-        'WARNING: The formatter detected TL notes in the dialogue but no chapter title in the TL Notes tab. TL notes were not formatted.';
-    }
-  }
+function formatTlMarker({ line, outputObj, tlNotes }) {
+  const markers = line.match(/\[\d+\]/g);
+  markers?.forEach((marker) => {
+    const tlCode = `<ref>${tlNotes[outputObj.tlNotesCount]}</ref>`;
+    line = line.replace(marker, tlCode);
+    outputObj.tlNotesCount += 1;
+  });
   return line;
 }

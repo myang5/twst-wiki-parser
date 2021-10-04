@@ -4,9 +4,9 @@ import {
   TabMenu,
   TabContent,
   InputEditor,
+  TLNotesEditor,
   DetailContent,
   RenderContent,
-  TLNotesContent,
 } from '../TabComponents';
 import convertText from 'Utils/convertText';
 import './Main.less';
@@ -49,7 +49,7 @@ const Input = () => {
         <RenderContent />
       </TabContent>
       <TabContent {...{ value: TABS.TL_NOTES, clicked }}>
-        <TLNotesContent />
+        <TLNotesEditor />
       </TabContent>
     </div>
   );
@@ -64,7 +64,6 @@ const Buttons = ({ outputRef }) => {
   const { nav, details, setDetails, renders, inputRef, tlNotesRef } =
     useContext(StateContext);
   const [copyButton, setCopyButton] = useState(COPY_BUTTON_TEXT.COPY);
-  const [error, setError] = useState('');
 
   // copies text to clipboard
   const copyToClip = () => {
@@ -75,7 +74,6 @@ const Buttons = ({ outputRef }) => {
 
   const convertOnClick = () => {
     setCopyButton(COPY_BUTTON_TEXT.COPY);
-    setError('');
     const output = convertText({
       inputData: inputRef.current.editor.getData(),
       tlNotesData: tlNotesRef.current.editor.getData(),
@@ -95,7 +93,6 @@ const Buttons = ({ outputRef }) => {
       <button type="button" onClick={copyToClip} id="copy-button">
         {copyButton}
       </button>
-      <p className="error">{error}</p>
     </div>
   );
 };
