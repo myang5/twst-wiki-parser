@@ -33,7 +33,6 @@ export default function convertText({
       ? templates.personalStoryHeader()
       : '';
   output += templates.tabberHeaderPlaceholder();
-  output += templates.tableStart();
 
   let tlMarkerCount = 0; // keep track of count to alert user when count mismatches
   const outputObj = { output, partCount: 0 };
@@ -102,10 +101,9 @@ const getTemplates = (details) => {
     featuredCharacter,
   )}}}
 {{FanTL|tl=[${tlLink} ${translator}]|story}}
-{| class="storytable imgfit" width="100%" style="text-align:left"
+{| class="storytable imgfit"
 |- id="Top"
-! colspan="3" |${title}
-|}
+! ${title}
 `;
   templates.tabberHeaderPlaceholder = () => `tabber-placeholder
 `;
@@ -116,8 +114,7 @@ const getTemplates = (details) => {
 `;
   templates.partLine = (number) => `|-|Part ${number}=
 `;
-  templates.tableStart =
-    () => `{| class="storytable imgfit" width="100%" style="text-align:left"
+  templates.tableStart = () => `{| class="storytable imgfit"
 `;
   templates.cgRender = (filename) => `|-
 | colspan="3" |[[File:${filename}]]
@@ -144,7 +141,6 @@ const getTemplates = (details) => {
 | colspan="3" class="bottomnav" |✦ [[${CATEGORY_NAMES[featuredCharacter]}/Personal Story|Main]] ✦
 |-
 | colspan="3" style="text-align:center;" |[[#Top|Jump to top]]
-|-
 `;
   templates.tableEnd = () => `|}
 `;
