@@ -43,8 +43,7 @@
   flex-direction: column;
   margin: @tab-menu-height 0 0 0;
 
-  button,
-  .error {
+  button {
     width: @actions-width;
     margin: 0 0 1rem 0;
   }
@@ -64,11 +63,6 @@
 
   #copy-button {
     &:extend(.secondary-button);
-  }
-
-  .error {
-    color: red;
-    text-align: center;
   }
 }
 
@@ -96,13 +90,6 @@
 
     button {
       margin: 0 0.5rem;
-    }
-
-    .error {
-      width: 80%;
-      flex: 1 0 auto;
-      margin-top: 0.5rem;
-      margin-bottom: 0;
     }
   }
 }

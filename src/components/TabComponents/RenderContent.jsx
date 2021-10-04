@@ -18,7 +18,7 @@ export default function RenderContent() {
         <a
           target="_blank"
           rel="noreferrer"
-          href="https://twisted-wonderland.fandom.com/wiki/Template:Story_Character"
+          href="https://twistedwonderland.miraheze.org/wiki/Template:Story_Character"
         >
           template documentation
         </a>{' '}

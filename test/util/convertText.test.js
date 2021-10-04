@@ -33,7 +33,7 @@ How to detect dialogue line styling vs. other styling?
 Evaluate <p>.innerText and then decide from there
 */
 
-describe('convertText', () => {
+describe.skip('convertText', () => {
   let inputData;
   let tlNotesData;
   let renders;

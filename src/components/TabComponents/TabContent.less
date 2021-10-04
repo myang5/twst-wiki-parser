@@ -13,7 +13,7 @@
     display: flex;
   }
 
-  &:not(.tab-content--text) {
+  &:not(.tab-content--text, .tab-content--tl-notes) {
     padding: 20px;
     flex-direction: column;
     overflow-y: auto;
@@ -68,7 +68,8 @@
   }
 }
 
-.tab-content--text {
+.tab-content--text,
+.tab-content--tl-notes {
   .ck.ck-editor__editable_inline {
     border: none;
     height: inherit;
@@ -85,35 +86,5 @@
   }
   .p--margin-bottom-none {
     margin-bottom: 0;
-  }
-}
-
-.tab-content--tl-notes {
-  .tab-content__grid {
-    height: 100%;
-    grid-template-rows: auto auto 1fr;
-
-    .tab-content__tl-editor-label {
-      align-self: start;
-    }
-
-    .tab-content__tl-editor {
-      display: flex;
-      height: 100%;
-      align-items: flex-start;
-    }
-  }
-
-  .ck.ck-editor__editable_inline {
-    border: 1px solid var(--ck-color-base-border);
-    height: 100%;
-    width: 100%;
-    max-height: initial;
-    overflow-y: auto;
-    -webkit-appearance: textfield;
-  }
-
-  .ck.ck.ck-editor__editable_inline:not(.ck-editor__nested-editable).ck-focused {
-    border: 1px solid var(--ck-color-base-border);
   }
 }

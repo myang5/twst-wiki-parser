@@ -6,7 +6,8 @@
     "test": "jest",
     "dev": "webpack-dev-server --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
-    "ncu": "ncu \"/ckeditor/\" -u"
+    "ncu": "ncu \"/ckeditor/\" -u",
+    "lint": "eslint -c .eslintrc.prod.js"
   },
   "lint-staged": {
     "*.{js,jsx,css}": [
