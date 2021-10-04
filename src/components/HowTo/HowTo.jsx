@@ -124,40 +124,44 @@ export default function HowTo() {
 
         <h3 id="tlNotesSection">TL Notes Tab</h3>
         <p>
-          In the Text tab, you can mark the place the translation note refers to
-          with a marker like this:
+          In the Text tab, you can mark the place where translation note should
+          be inserted like this:
         </p>
         <blockquote>
-          Izumi: I don’t know if they’re Eden or oden[1] or what, but we can’t
-          let them have their way in our territory[2].
+          Idia: Generally I hate talking face-to-face, but if I’m playing a
+          BG…[1] What, you don’t know what BG means? It stands for ‘board
+          game’…”[2]
         </blockquote>
         <p>
-          You can have markers in the middle or end of the line, or even
-          multiple markers in one line if needed.
+          You can have multiple markers in the middle or end of the dialogue
+          line
         </p>
         <p>
-          In the TL Notes tab, here&apos;s an example of how the notes should be
-          formatted:
+          In the TL Notes tab, paste in the actual text of the translation
+          notes:
         </p>
         <blockquote>
-          <ol>
-            <li>Place translator notes in a numbered list like this.</li>
-            <li>Make sure the numbers correspond to each marker!</li>
-          </ol>
+          <p>
+            1. Translation notes should start with a number followed by a
+            period.
+          </p>
+          <p>
+            If a paragraph doesn't start with a number, the formatter will
+            assume that the paragraph is part of the previous note.
+          </p>
+          <p>2. Second translation note</p>
         </blockquote>
         <ul>
           <li>
-            The formatter identifies TL notes by looking for numbers at the
-            beginning of a paragraph.
+            Technically, you don't need to worry about matching the exact
+            numbers in the TL note markers to the TL note text. The formatter
+            will insert the TL notes in the order that they appear in the TL
+            Notes tab.
           </li>
           <li>
-            <strong>
-              The TL notes can also be in an actual ordered list, which is
-              preferable.
-            </strong>{' '}
-            You can use the editor to format the list:
+            Just make sure that you have an equal number of markers and TL notes
+            :0
           </li>
-          <img alt="how to create the list with the editor" src={list} />
         </ul>
       </div>
       <footer />
