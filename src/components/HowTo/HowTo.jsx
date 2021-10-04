@@ -1,5 +1,4 @@
 import React from 'react';
-import list from 'Assets/list.png';
 import headingExample from 'Assets/headingExample.png';
 import partExample from 'Assets/partExample.png';
 import './HowTo.less';
@@ -146,14 +145,14 @@ export default function HowTo() {
             period.
           </p>
           <p>
-            If a paragraph doesn't start with a number, the formatter will
+            If a paragraph doesn&apos;t start with a number, the formatter will
             assume that the paragraph is part of the previous note.
           </p>
           <p>2. Second translation note</p>
         </blockquote>
         <ul>
           <li>
-            Technically, you don't need to worry about matching the exact
+            Technically, you don&apos;t need to worry about matching the exact
             numbers in the TL note markers to the TL note text. The formatter
             will insert the TL notes in the order that they appear in the TL
             Notes tab.

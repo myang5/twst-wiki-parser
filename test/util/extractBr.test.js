@@ -6,13 +6,13 @@ describe('extractBr', () => {
     expect(extractBr(document.body)).toBe(document.body);
   });
 
-  xtest('does not edit paragraphs with no <br>', () => {
+  test.skip('does not edit paragraphs with no <br>', () => {
     document.body.innerHTML = '<p>Line 1</p>';
     const paragraphs = Array.from(document.body.querySelectorAll('p'));
     expect(paragraphs.map((p) => p.innerHTML)).toEqual(['Line 1']);
   });
 
-  xdescribe('given a DOM with multiple lines and <br> tags', () => {
+  describe.skip('given a DOM with multiple lines and <br> tags', () => {
     beforeEach(() => {
       document.body.innerHTML =
         '<p>Line 1<br><br>Line 2<br><br>Line 3<br><br>Line 4</p>';
