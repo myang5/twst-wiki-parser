@@ -173,7 +173,7 @@ button,
 .tab-content.tab-content--active {
   display: flex;
 }
-.tab-content:not(.tab-content--text) {
+.tab-content:not(.tab-content--text, .tab-content--tl-notes) {
   padding: 20px;
   flex-direction: column;
   overflow-y: auto;
@@ -218,7 +218,8 @@ button,
 .tab-content .tab-content__grid .row--label-only {
   margin-bottom: -1rem;
 }
-.tab-content--text .ck.ck-editor__editable_inline {
+.tab-content--text .ck.ck-editor__editable_inline,
+.tab-content--tl-notes .ck.ck-editor__editable_inline {
   border: none;
   height: inherit;
   width: inherit;
@@ -231,29 +232,6 @@ button,
 }
 .tab-content--story-nav .p--margin-bottom-none {
   margin-bottom: 0;
-}
-.tab-content--tl-notes .tab-content__grid {
-  height: 100%;
-  grid-template-rows: auto auto 1fr;
-}
-.tab-content--tl-notes .tab-content__grid .tab-content__tl-editor-label {
-  align-self: start;
-}
-.tab-content--tl-notes .tab-content__grid .tab-content__tl-editor {
-  display: flex;
-  height: 100%;
-  align-items: flex-start;
-}
-.tab-content--tl-notes .ck.ck-editor__editable_inline {
-  border: 1px solid var(--ck-color-base-border);
-  height: 100%;
-  width: 100%;
-  max-height: initial;
-  overflow-y: auto;
-  -webkit-appearance: textfield;
-}
-.tab-content--tl-notes .ck.ck.ck-editor__editable_inline:not(.ck-editor__nested-editable).ck-focused {
-  border: 1px solid var(--ck-color-base-border);
 }
 
 button,
@@ -311,8 +289,7 @@ button,
   flex-direction: column;
   margin: 26.5px 0 0 0;
 }
-.actions button,
-.actions .error {
+.actions button {
   width: 140px;
   margin: 0 0 1rem 0;
 }
@@ -322,10 +299,6 @@ button,
 }
 .actions button:active {
   transform: scale(0.9);
-}
-.actions .error {
-  color: red;
-  text-align: center;
 }
 @media (max-width: 1022px) {
   /*half-screen window*/
@@ -349,12 +322,6 @@ button,
   }
   .actions button {
     margin: 0 0.5rem;
-  }
-  .actions .error {
-    width: 80%;
-    flex: 1 0 auto;
-    margin-top: 0.5rem;
-    margin-bottom: 0;
   }
 }
 
