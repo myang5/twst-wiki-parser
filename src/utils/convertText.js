@@ -130,7 +130,7 @@ const getTemplates = (details) => {
 | colspan="2" |${line}
 `;
   templates.npcDialogueLine = (name, line) => `|-
-| class="character" style="padding:3em" |${name}
+|{{Story Character|npc|${name}}}
 | colspan="2" |${line}
 `;
   templates.choice = (choice1, choice2) => `|-
